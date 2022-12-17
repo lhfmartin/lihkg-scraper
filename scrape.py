@@ -13,6 +13,7 @@ if __name__ == "__main__":
     import os
     import logging
     import json
+    import time
     import pathlib
 
     import scrapers
@@ -26,22 +27,28 @@ if __name__ == "__main__":
 
     if output_folder is None:
         output_folder = "."
-    output_folder = os.path.join(output_folder, thread_id)
+    output_folder = os.path.join(
+        output_folder, f"thread_{thread_id} {time.strftime('%Y%m%d-%H%M%S')}"
+    )
 
     logger.debug(
-        f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}"
+        f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}. Output files will be saved to {output_folder}"
     )
 
     pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
     if page_number is None:
-        pages = scrapers.scrape_pages(thread_id, open_new_tab=True)
+        pages = scrapers.scrape_thread(thread_id, open_new_tab=True)
     else:
-        pages = scrapers.scrape_thread(thread_id)(
+        pages = scrapers.scrape_pages(
             thread_id,
+            start_page_number=page_number,
+            end_page_number=page_number,
             open_new_tab=True,
         )
 
     for page_number, page_data in pages:
         with open(os.path.join(output_folder, f"page_{page_number}.json"), "w+") as f:
             f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
+
+    logger.debug(f"Scraping completed")

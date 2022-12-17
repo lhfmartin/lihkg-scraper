@@ -13,4 +13,11 @@ Download LIHKG threads (aka posts) and pages in json format.
 1. Quit Google Chrome if it is opened
 2. Open Google Chrome with `--remote-debugging-port=9222` passed into the command line arguments.
     - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in `config/config.ini` if other ports is used.
-3. Run `python3 scrape_thread.py -t <thread-id> -o <output-folder>`, all pages in the thread will be saved inside `<output-folder>/<thread-id>`
+3. Run the program
+
+``` bash
+python3 scrape.py -t <thread-id> -p <page-number> -o <output-folder>
+```
+- `<thread-id>` is required
+- `<page-number>` is optional, will scrape all pages in the thread if not provided
+- `<output-folder>` is optional, will save the output to the current directory if not provided
