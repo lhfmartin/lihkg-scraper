@@ -8,11 +8,11 @@ from drivers import driver
 logger = logging.getLogger("lihkg-scraper")
 
 
-def scrape_page(thread, page, open_new_tab=False):
+def scrape_page(thread_id, page_number, open_new_tab=False):
     if open_new_tab:
         driver.switch_to.new_window("tab")
 
-    driver.get(f"https://lihkg.com/thread/{thread}/page/{page}")
+    driver.get(f"https://lihkg.com/thread/{thread_id}/page/{page_number}")
 
     performance_logs_filtered = []
     while True:
@@ -28,7 +28,7 @@ def scrape_page(thread, page, open_new_tab=False):
             for pl in performance_logs
             if pl["method"] == "Network.responseReceived"
             and "json" in pl["params"]["response"]["mimeType"]
-            and f"{thread}/page/{page}" in pl["params"]["response"]["url"]
+            and f"{thread_id}/page/{page_number}" in pl["params"]["response"]["url"]
         ]
 
         performance_logs_filtered += performance_logs
