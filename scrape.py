@@ -35,12 +35,13 @@ if __name__ == "__main__":
     pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
     if page_number is None:
-        for page_number, page_data in scrapers.scrape_thread(thread_id, True):
-            with open(
-                os.path.join(output_folder, f"page_{page_number}.json"), "w+"
-            ) as f:
-                f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
+        pages = scrapers.scrape_pages(thread_id, open_new_tab=True)
     else:
-        page_data = scrapers.scrape_page(thread_id, page_number, True)
+        pages = scrapers.scrape_thread(thread_id)(
+            thread_id,
+            open_new_tab=True,
+        )
+
+    for page_number, page_data in pages:
         with open(os.path.join(output_folder, f"page_{page_number}.json"), "w+") as f:
             f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
