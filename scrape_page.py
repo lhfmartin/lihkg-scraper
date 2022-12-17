@@ -3,9 +3,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--thread", "-t", required=True)
+    parser.add_argument("--page", "-p", required=True)
     parser.add_argument("--output-folder", "-o", required=False)
     args = parser.parse_args()
     thread = args.thread
+    page = args.page
     output_folder = args.output_folder
 
     import os
@@ -18,10 +20,9 @@ if __name__ == "__main__":
         output_folder = "."
     output_folder = os.path.join(output_folder, thread)
 
-    pages = scrapers.scrape_thread(thread, True)
+    thread_page = scrapers.scrape_page(thread, page, True)
 
     pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
-    for i, x in enumerate(pages):
-        with open(os.path.join(output_folder, f"page_{i + 1}.json"), "w+") as f:
-            f.write(json.dumps(x, ensure_ascii=False) + "\n")
+    with open(os.path.join(output_folder, f"page_{page}.json"), "w+") as f:
+        f.write(json.dumps(thread_page, ensure_ascii=False) + "\n")
