@@ -18,10 +18,10 @@ if __name__ == "__main__":
 
     import scrapers
 
-    FORMAT = "%(asctime)s %(filename)s %(levelname)s: %(message)s"
+    LOG_FORMAT = "%(asctime)s %(filename)s %(levelname)s: %(message)s"
     logger = logging.getLogger("lihkg-scraper")
     handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter(FORMAT))
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
 
