@@ -1,7 +1,11 @@
+import logging
 import json
 import time
 
 from drivers import driver
+
+
+logger = logging.getLogger("lihkg-scraper")
 
 
 def scrape_page(thread, page, open_new_tab=False):
@@ -35,6 +39,6 @@ def scrape_page(thread, page, open_new_tab=False):
     log = performance_logs_filtered[0]
     req_id = log["params"]["requestId"]
     res_url = log["params"]["response"]["url"]
-    print(f"Parsing {res_url}")
     res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
+    logger.debug(f"Parsing {res_url}")
     return json.loads(res["body"])
