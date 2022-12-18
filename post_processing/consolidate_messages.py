@@ -14,7 +14,7 @@ def consolidate_messages(thread_folder_path):
 
     for x in os.listdir(thread_pages_raw_jsons_folder_path):
         if x.startswith("page_") and x.endswith(".json"):
-            page_numbers.add(re.search("page_(\d+).json", x).group(1))
+            page_numbers.add(int(re.search("page_(\d+).json", x).group(1)))
 
     all_messages = []
     for page_number in sorted(page_numbers):

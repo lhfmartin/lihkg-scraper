@@ -18,7 +18,7 @@ if __name__ == "__main__":
     import pathlib
 
     import scrapers
-    from post_processing import consolidate_messages
+    from post_processing import consolidate_messages, download_images
 
     LOG_FORMAT = "%(asctime)s %(filename)s %(levelname)s: %(message)s"
     logger = logging.getLogger("lihkg-scraper")
@@ -40,6 +40,9 @@ if __name__ == "__main__":
 
     pathlib.Path(thread_folder_path).mkdir(parents=True, exist_ok=True)
     pathlib.Path(thread_pages_raw_jsons_folder_path).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(os.path.join(thread_folder_path, "images")).mkdir(
+        parents=True, exist_ok=True
+    )
 
     if page_number is None:
         pages = scrapers.scrape_thread(thread_id, open_new_tab=True)
@@ -75,7 +78,7 @@ if __name__ == "__main__":
 
     output_file_type = "json"
 
-    if output_file_type == "csv": # Not supported currently
+    if output_file_type == "csv":  # Not supported currently
         import pandas as pd
 
         pd.DataFrame(all_messages).set_index("msg_num").to_csv(
@@ -84,5 +87,20 @@ if __name__ == "__main__":
     elif output_file_type == "json":
         with open(os.path.join(thread_folder_path, "messages.json"), "w+") as f:
             f.write(json.dumps(all_messages, ensure_ascii=False) + "\n")
+
+    # Download images
+    images_downloads = download_images(thread_folder_path)
+
+    for image_url in images_downloads["downloaded"]:
+        image_new_file_name, image_binary = images_downloads["downloaded"][image_url]
+        with open(
+            os.path.join(thread_folder_path, "images", image_new_file_name), "wb+"
+        ) as f:
+            f.write(image_binary)
+
+        images_downloads["downloaded"][image_url] = image_new_file_name
+
+    with open(os.path.join(thread_folder_path, "images.json"), "w+") as f:
+        f.write(json.dumps(images_downloads, ensure_ascii=False) + "\n")
 
     logger.debug(f"Scraping completed. Data have been saved to {thread_folder_path}")

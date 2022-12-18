@@ -2,6 +2,8 @@
 
 Download LIHKG threads (aka posts) and pages in json format.
 
+The approach is selenium will connect to the local Chrome browser and "overheard" the traffic between the browser and the LIHKG server, so that the very same API response which is used to render the LIHKG web app could be seen by selenium. Image urls will be parsed at the end of the script and downloaded separately.
+
 ## Setting up
 
 1. Install required packages using `pip3 install -r requirements.txt`
