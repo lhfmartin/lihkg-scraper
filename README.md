@@ -17,4 +17,3 @@ Download LIHKG threads (aka posts) and pages in json format.
     - `<thread-id>` is required
     - `<page-number>` is optional, will scrape all pages in the thread if not provided
     - `<output-folder>` is optional, will save the output to the current directory if not provided
-4. The messages in a thread can be reduced to a single csv or json using `python3 consolidate_messages.py <thread-folder> <csv|json>`
