@@ -60,6 +60,7 @@ if __name__ == "__main__":
         ) as f:
             f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
 
+    # Process thread data and write to thread.json
     thread_data = copy.deepcopy(page_data["response"])
     del thread_data["page"]
     del thread_data["item_data"]
@@ -69,6 +70,19 @@ if __name__ == "__main__":
     with open(os.path.join(thread_folder_path, "thread.json"), "w+") as f:
         f.write(json.dumps(thread_data, ensure_ascii=False) + "\n")
 
-    consolidate_messages(thread_folder_path)
+    # Consolidate messages and write to messages.json
+    all_messages = consolidate_messages(thread_folder_path)
 
-    logger.debug(f"Scraping completed")
+    output_file_type = "json"
+
+    if output_file_type == "csv": # Not supported currently
+        import pandas as pd
+
+        pd.DataFrame(all_messages).set_index("msg_num").to_csv(
+            os.path.join(thread_folder_path, "messages.csv")
+        )
+    elif output_file_type == "json":
+        with open(os.path.join(thread_folder_path, "messages.json"), "w+") as f:
+            f.write(json.dumps(all_messages, ensure_ascii=False) + "\n")
+
+    logger.debug(f"Scraping completed. Data have been saved to {thread_folder_path}")
