@@ -23,7 +23,8 @@ class PageDao(Dao):
             ),
             "w+",
         ) as f:
-            f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
+            json.dump(page_data, f, ensure_ascii=False)
+            f.write("\n")
 
     def load_page(self, page_number):
         with open(
@@ -32,7 +33,7 @@ class PageDao(Dao):
             ),
             "r",
         ) as f:
-            page = json.loads(f.read())
+            page = json.load(f)
         return page
 
     def get_available_page_numbers(self):

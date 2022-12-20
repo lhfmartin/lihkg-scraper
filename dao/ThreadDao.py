@@ -10,11 +10,13 @@ class ThreadDao(Dao):
 
     def save_topic(self, thread_data):
         with open(os.path.join(self.thread_folder_path, "topic.json"), "w+") as f:
-            f.write(json.dumps(thread_data, ensure_ascii=False) + "\n")
+            json.dump(thread_data, f, ensure_ascii=False)
+            f.write("\n")
 
     def save_messages(self, messages):
         with open(os.path.join(self.thread_folder_path, "messages.json"), "w+") as f:
-            f.write(json.dumps(messages, ensure_ascii=False) + "\n")
+            json.dump(messages, f, ensure_ascii=False)
+            f.write("\n")
 
     def load_messages(self):
         with open(os.path.join(self.thread_folder_path, "messages.json"), "r") as f:
@@ -23,4 +25,5 @@ class ThreadDao(Dao):
 
     def save_image_mappings(self, image_mappings):
         with open(os.path.join(self.thread_folder_path, "images.json"), "w+") as f:
-            f.write(json.dumps(image_mappings, ensure_ascii=False) + "\n")
+            json.dump(image_mappings, f, ensure_ascii=False)
+            f.write("\n")
