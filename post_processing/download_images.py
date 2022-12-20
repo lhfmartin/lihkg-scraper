@@ -6,9 +6,8 @@ import requests
 import uuid
 
 
-def download_images(thread_folder_path):
-    with open(os.path.join(thread_folder_path, "messages.json"), "r") as f:
-        messages = f.read()
+def download_images(thread_dao):
+    messages = thread_dao.load_messages()
 
     urls = re.findall(r"(?:src|href)=\\\"(.*?)\\\"", messages)
     urls = [

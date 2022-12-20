@@ -10,14 +10,12 @@ if __name__ == "__main__":
     page_number = args.page
     output_folder_path = args.output_folder
 
-    import os
     import copy
     import logging
-    import json
     import time
-    import pathlib
 
     import scrapers
+    from dao import ImageDao, PageDao, ThreadDao
     from post_processing import consolidate_messages, download_images
 
     LOG_FORMAT = "%(asctime)s %(filename)s %(levelname)s: %(message)s"
@@ -29,19 +27,14 @@ if __name__ == "__main__":
 
     if output_folder_path is None:
         output_folder_path = "."
-    thread_folder_path = os.path.join(
-        output_folder_path, f"thread_{thread_id} {time.strftime('%Y%m%d_%H%M%S')}"
-    )
-    thread_pages_raw_jsons_folder_path = os.path.join(thread_folder_path, "pages")
+
+    scrape_time_str = time.strftime("%Y%m%d_%H%M%S")
+    thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
+    image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
+    page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
 
     logger.debug(
-        f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_folder_path}"
-    )
-
-    pathlib.Path(thread_folder_path).mkdir(parents=True, exist_ok=True)
-    pathlib.Path(thread_pages_raw_jsons_folder_path).mkdir(parents=True, exist_ok=True)
-    pathlib.Path(os.path.join(thread_folder_path, "images")).mkdir(
-        parents=True, exist_ok=True
+        f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.thread_folder_path}"
     )
 
     if page_number is None:
@@ -55,26 +48,19 @@ if __name__ == "__main__":
         )
 
     for page_number, page_data in pages:
-        with open(
-            os.path.join(
-                thread_pages_raw_jsons_folder_path, f"page_{page_number}.json"
-            ),
-            "w+",
-        ) as f:
-            f.write(json.dumps(page_data, ensure_ascii=False) + "\n")
+        page_dao.save_page(page_number, page_data)
 
-    # Process thread data and write to thread.json
+    # Process thread data and write to topic.json
     thread_data = copy.deepcopy(page_data["response"])
     del thread_data["page"]
     del thread_data["item_data"]
     if "me" in thread_data:
         del thread_data["me"]
 
-    with open(os.path.join(thread_folder_path, "thread.json"), "w+") as f:
-        f.write(json.dumps(thread_data, ensure_ascii=False) + "\n")
+    thread_dao.save_topic(thread_data)
 
     # Consolidate messages and write to messages.json
-    all_messages = consolidate_messages(thread_folder_path)
+    all_messages = consolidate_messages(page_dao)
 
     output_file_type = "json"
 
@@ -85,22 +71,19 @@ if __name__ == "__main__":
             os.path.join(thread_folder_path, "messages.csv")
         )
     elif output_file_type == "json":
-        with open(os.path.join(thread_folder_path, "messages.json"), "w+") as f:
-            f.write(json.dumps(all_messages, ensure_ascii=False) + "\n")
+        thread_dao.save_messages(all_messages)
 
     # Download images
-    images_downloads = download_images(thread_folder_path)
+    images_downloads = download_images(thread_dao)
 
     for image_url in images_downloads["downloaded"]:
         image_new_file_name, image_binary = images_downloads["downloaded"][image_url]
-        with open(
-            os.path.join(thread_folder_path, "images", image_new_file_name), "wb+"
-        ) as f:
-            f.write(image_binary)
+        image_dao.save_image(image_new_file_name, image_binary)
 
         images_downloads["downloaded"][image_url] = image_new_file_name
 
-    with open(os.path.join(thread_folder_path, "images.json"), "w+") as f:
-        f.write(json.dumps(images_downloads, ensure_ascii=False) + "\n")
+    thread_dao.save_image_mappings(images_downloads)
 
-    logger.debug(f"Scraping completed. Data have been saved to {thread_folder_path}")
+    logger.debug(
+        f"Scraping completed. Data have been saved to {thread_dao.thread_folder_path}"
+    )

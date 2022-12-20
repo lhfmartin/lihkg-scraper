@@ -1,30 +1,15 @@
 import json
 import os
-import re
 import sys
 
 
-def consolidate_messages(thread_folder_path):
-    thread_pages_raw_jsons_folder_path = os.path.join(thread_folder_path, "pages")
-
-    # if output_file_type not in ("csv", "json"):
-    #     raise ValueError("Output file type should be either csv or json")
-
-    page_numbers = set()
-
-    for x in os.listdir(thread_pages_raw_jsons_folder_path):
-        if x.startswith("page_") and x.endswith(".json"):
-            page_numbers.add(int(re.search("page_(\d+).json", x).group(1)))
+def consolidate_messages(page_dao):
+    page_numbers = page_dao.get_available_page_numbers()
 
     all_messages = []
     for page_number in sorted(page_numbers):
-        with open(
-            os.path.join(
-                thread_pages_raw_jsons_folder_path, f"page_{page_number}.json"
-            ),
-            "r",
-        ) as f:
-            messages = json.loads(f.read())["response"]["item_data"]
+        page = page_dao.load_page(page_number)
+        messages = page["response"]["item_data"]
 
         # if output_file_type == "csv":
         #     for i, x in enumerate(messages):
