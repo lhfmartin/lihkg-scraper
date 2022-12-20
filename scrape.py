@@ -74,15 +74,7 @@ if __name__ == "__main__":
         thread_dao.save_messages(all_messages)
 
     # Download images
-    images_downloads = download_images(thread_dao)
-
-    for image_url in images_downloads["downloaded"]:
-        image_new_file_name, image_binary = images_downloads["downloaded"][image_url]
-        image_dao.save_image(image_new_file_name, image_binary)
-
-        images_downloads["downloaded"][image_url] = image_new_file_name
-
-    thread_dao.save_image_mappings(images_downloads)
+    images_downloads = download_images(thread_dao, image_dao)
 
     logger.debug(
         f"Scraping completed. Data have been saved to {thread_dao.thread_folder_path}"

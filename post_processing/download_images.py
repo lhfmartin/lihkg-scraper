@@ -6,7 +6,7 @@ import requests
 import uuid
 
 
-def download_images(thread_dao):
+def download_images(thread_dao, image_dao):
     messages = thread_dao.load_messages()
 
     urls = re.findall(r"(?:src|href)=\\\"(.*?)\\\"", messages)
@@ -36,7 +36,8 @@ def download_images(thread_dao):
         ):
             file_format = response.headers["Content-Type"][6:]
             image_new_file_name = f"{uuid.uuid4().hex}.{file_format}"
+            image_dao.save_image(image_new_file_name, response.content)
 
-            images_downloads["downloaded"][x] = (image_new_file_name, response.content)
+            images_downloads["downloaded"][x] = image_new_file_name
 
-    return images_downloads
+    thread_dao.save_image_mappings(images_downloads)
