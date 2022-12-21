@@ -18,7 +18,7 @@ if __name__ == "__main__":
     from dao import ImageDao, PageDao, ThreadDao
     from post_processing import consolidate_messages, download_images
 
-    LOG_FORMAT = "%(asctime)s %(filename)s %(levelname)s: %(message)s"
+    LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
     logger = logging.getLogger("lihkg-scraper")
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if output_folder_path is None:
         output_folder_path = "."
 
-    scrape_time_str = time.strftime("%Y%m%d_%H%M%S")
+    scrape_time_str = time.strftime("%Y%m%dT%H%M%S")
     thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
     image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
     page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
