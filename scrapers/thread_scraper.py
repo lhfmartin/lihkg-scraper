@@ -1,4 +1,3 @@
-from drivers import driver
 from scrapers.pages_scraper import scrape_pages
 
 

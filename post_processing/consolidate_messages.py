@@ -1,8 +1,3 @@
-import json
-import os
-import sys
-
-
 def consolidate_messages(page_dao):
     page_numbers = page_dao.get_available_page_numbers()
 

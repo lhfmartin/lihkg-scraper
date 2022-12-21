@@ -33,7 +33,7 @@ if __name__ == "__main__":
     image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
     page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
 
-    logger.debug(
+    logger.info(
         f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.thread_folder_path}"
     )
 
@@ -62,20 +62,11 @@ if __name__ == "__main__":
     # Consolidate messages and write to messages.json
     all_messages = consolidate_messages(page_dao)
 
-    output_file_type = "json"
-
-    if output_file_type == "csv":  # Not supported currently
-        import pandas as pd
-
-        pd.DataFrame(all_messages).set_index("msg_num").to_csv(
-            os.path.join(thread_folder_path, "messages.csv")
-        )
-    elif output_file_type == "json":
-        thread_dao.save_messages(all_messages)
+    thread_dao.save_messages(all_messages)
 
     # Download images
-    images_downloads = download_images(thread_dao, image_dao)
+    download_images(thread_dao, image_dao)
 
-    logger.debug(
+    logger.info(
         f"Scraping completed. Data have been saved to {thread_dao.thread_folder_path}"
     )

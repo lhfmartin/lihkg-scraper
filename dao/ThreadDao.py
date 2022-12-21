@@ -13,14 +13,23 @@ class ThreadDao(Dao):
             json.dump(thread_data, f, ensure_ascii=False)
             f.write("\n")
 
-    def save_messages(self, messages):
-        with open(os.path.join(self.thread_folder_path, "messages.json"), "w+") as f:
-            json.dump(messages, f, ensure_ascii=False)
-            f.write("\n")
+    def save_messages(self, messages, output_file_type="json"):
+        if output_file_type == "csv":  # Not supported currently
+            import pandas as pd
+
+            pd.DataFrame(messages).set_index("msg_num").to_csv(
+                os.path.join(self.thread_folder_path, "messages.csv")
+            )
+        elif output_file_type == "json":
+            with open(
+                os.path.join(self.thread_folder_path, "messages.json"), "w+"
+            ) as f:
+                json.dump(messages, f, ensure_ascii=False)
+                f.write("\n")
 
     def load_messages(self):
         with open(os.path.join(self.thread_folder_path, "messages.json"), "r") as f:
-            messages = f.read()
+            messages = json.load(f)
         return messages
 
     def save_image_mappings(self, image_mappings):

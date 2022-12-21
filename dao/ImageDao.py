@@ -11,7 +11,6 @@ class ImageDao(Dao):
         pathlib.Path(self.thread_images_folder_path).mkdir(parents=True, exist_ok=True)
 
     def save_image(self, file_name, image_binary):
-        with open(
-            os.path.join(self.thread_folder_path, "images", file_name), "wb+"
-        ) as f:
+        with open(os.path.join(self.thread_images_folder_path, file_name), "wb+") as f:
             f.write(image_binary)
+        return file_name
