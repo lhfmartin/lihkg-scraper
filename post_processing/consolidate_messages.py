@@ -1,8 +1,8 @@
-def consolidate_messages(page_dao):
+def consolidate_messages(page_dao, thread_dao):
     page_numbers = page_dao.get_available_page_numbers()
 
     all_messages = []
-    for page_number in sorted(page_numbers):
+    for page_number in page_numbers:
         page = page_dao.load_page(page_number)
         messages = page["response"]["item_data"]
 
@@ -14,5 +14,7 @@ def consolidate_messages(page_dao):
         #             del messages[i]["quote"]
         #         messages[i] = {**messages[i], **user_data}
         all_messages += messages
+
+    thread_dao.save_messages(all_messages)
 
     return all_messages

@@ -4,7 +4,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--thread", required=True)
     parser.add_argument("-p", "--page", required=False)
-    parser.add_argument("-o", "--output-folder", required=False)
+    parser.add_argument("-o", "--output-folder", required=False, default=".")
     args = parser.parse_args()
     thread_id = args.thread
     page_number = args.page
@@ -13,6 +13,7 @@ if __name__ == "__main__":
     import copy
     import logging
     import time
+    import sys
 
     import scrapers
     from dao import ImageDao, PageDao, ThreadDao
@@ -20,13 +21,10 @@ if __name__ == "__main__":
 
     LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
     logger = logging.getLogger("lihkg-scraper")
-    handler = logging.StreamHandler()
+    handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
-
-    if output_folder_path is None:
-        output_folder_path = "."
 
     scrape_time_str = time.strftime("%Y%m%dT%H%M%S")
     thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
@@ -54,17 +52,15 @@ if __name__ == "__main__":
     thread_data = copy.deepcopy(page_data["response"])
     del thread_data["page"]
     del thread_data["item_data"]
-    if "me" in thread_data:
-        del thread_data["me"]
+    # if "me" in thread_data:
+    #     del thread_data["me"]
 
     thread_dao.save_topic(thread_data)
 
     # Consolidate messages and write to messages.json
-    all_messages = consolidate_messages(page_dao)
+    consolidate_messages(page_dao, thread_dao)
 
-    thread_dao.save_messages(all_messages)
-
-    # Download images
+    # Download images and save images and image mappings to images/ and images.json respectively
     download_images(thread_dao, image_dao)
 
     logger.info(
