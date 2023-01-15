@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import uuid
+from urllib.parse import urlparse
 
 
 IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
@@ -12,11 +13,9 @@ logger = logging.getLogger("lihkg-scraper")
 
 
 def build_absolute_url_from_url(url):
-    return (
-        url
-        if url.startswith("http")
-        else "http://lihkg.com" + ("" if url.startswith("/") else "/") + url
-    )
+    if bool(urlparse(url).netloc):  # url is absolute url
+        return url
+    return "http://lihkg.com" + ("" if url.startswith("/") else "/") + url
 
 
 def download_images(thread_dao, image_dao):
