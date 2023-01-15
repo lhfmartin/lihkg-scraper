@@ -8,8 +8,21 @@ from urllib.parse import urlparse
 
 IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
 IMAGE_DOWNLOAD_STATUS_FAILED = "failed"
+URLS_TO_SKIP_DL_REGEX_LIST = [
+    "^https:\/\/www\.youtube\.com\/watch\?v=",
+    "^https:\/\/i\.lih\.kg\/thumbnail",
+]
 
 logger = logging.getLogger("lihkg-scraper")
+
+
+def url_matches_skip_download_patterns(url):
+    return any(
+        [
+            bool(re.search(pattern, url, re.IGNORECASE))
+            for pattern in URLS_TO_SKIP_DL_REGEX_LIST
+        ]
+    )
 
 
 def build_absolute_url_from_url(url):
@@ -33,6 +46,9 @@ def download_images(thread_dao, image_dao):
 
     for x in urls:
         if x in images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED]:
+            continue
+        if url_matches_skip_download_patterns(x):
+            logger.debug(f"Skipping {x} as it matches the predefined patterns to skip")
             continue
 
         try:
