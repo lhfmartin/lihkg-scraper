@@ -11,8 +11,8 @@ if __name__ == "__main__":
     output_folder_path = args.output_folder
 
     import copy
+    from datetime import datetime, timezone
     import logging
-    import time
     import sys
 
     import scrapers
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
 
-    scrape_time_str = time.strftime("%Y%m%dT%H%M%S")
+    scrape_time_str = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
     image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
     page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
