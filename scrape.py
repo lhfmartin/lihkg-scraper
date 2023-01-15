@@ -4,7 +4,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--thread", required=True)
     parser.add_argument("-p", "--page", required=False)
-    parser.add_argument("-o", "--output-folder", required=False, default=".")
+    parser.add_argument("-o", "--output-folder", required=False, default="./output")
     args = parser.parse_args()
     thread_id = args.thread
     page_number = args.page

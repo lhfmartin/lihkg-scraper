@@ -18,4 +18,4 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
 3. Run `python3 scrape.py -t <thread-id> -p <page-number> -o <output-folder>`
     - `-t <thread-id>` is required
     - `-p <page-number>` is optional, will scrape all pages in the thread if not provided
-    - `-o <output-folder>` is optional, will save the output to the current directory if not provided
+    - `-o <output-folder>` is optional, will save the output to `output` if not provided
