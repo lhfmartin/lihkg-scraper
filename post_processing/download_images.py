@@ -59,13 +59,15 @@ def download_images(thread_dao, image_dao):
             images_downloads[IMAGE_DOWNLOAD_STATUS_FAILED][x] = str(e)
             continue
 
-        if "image/" in response.headers["Content-Type"]:
-            file_format = response.headers["Content-Type"][6:]
+        response_content_type = response.headers.get("Content-Type")
+        if response_content_type is None:
+            logger.debug(f"The Content-Type header of {x} is missing")
+        elif "image/" in response_content_type:
+            file_format = response_content_type[6:]
             image_new_file_name = f"{uuid.uuid4().hex}.{file_format}"
 
-            images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED][
-                x
-            ] = image_dao.save_image(image_new_file_name, response.content)
+            image_dao.save_image(image_new_file_name, response.content)
+            images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED][x] = image_new_file_name
             logger.debug(f"Downloaded {x} successfully")
         else:
             logger.debug(f"The Content-Type header says {x} is not an image")
