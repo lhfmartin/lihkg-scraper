@@ -26,8 +26,8 @@ def url_matches_skip_download_patterns(url):
 
 
 def build_absolute_url_from_url(url):
-    if bool(urlparse(url).netloc):  # url is absolute url
-        return url
+    if bool(urlparse(url).netloc):
+        return url  # url is absolute url
     return "http://lihkg.com" + ("" if url.startswith("/") else "/") + url
 
 
@@ -53,6 +53,7 @@ def download_images(thread_dao, image_dao):
 
         try:
             response = requests.get(build_absolute_url_from_url(x))
+            response.raise_for_status()
         except requests.exceptions.RequestException as e:
             logger.debug(f"Failed to download {x}")
             images_downloads[IMAGE_DOWNLOAD_STATUS_FAILED][x] = str(e)
