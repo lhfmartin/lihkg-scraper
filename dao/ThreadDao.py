@@ -13,6 +13,11 @@ class ThreadDao(Dao):
             json.dump(thread_data, f, ensure_ascii=False)
             f.write("\n")
 
+    def load_topic(self):
+        with open(os.path.join(self.thread_folder_path, "topic.json"), "r") as f:
+            topic = json.load(f)
+        return topic
+
     def save_messages(self, messages, output_file_type="json"):
         if output_file_type == "csv":  # Not supported currently
             import pandas as pd
