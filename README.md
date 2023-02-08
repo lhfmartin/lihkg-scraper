@@ -17,5 +17,6 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
     - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in `config/config.ini` if other ports is used.
 3. Run `python3 scrape.py -t <thread-id> -p <page-number> -o <output-folder>`
     - `-t <thread-id>` is required
-    - `-p <page-number>` is optional, will scrape all pages in the thread if not provided
+    - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\
+    Examples: `-p 1` / `-p 1-5,8,11-13`
     - `-o <output-folder>` is optional, will save the output to `output` if not provided

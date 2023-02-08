@@ -3,11 +3,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--thread", required=True)
-    parser.add_argument("-p", "--page", required=False)
+    parser.add_argument("-p", "--pages", required=False)
     parser.add_argument("-o", "--output-folder", required=False, default="./output")
     args = parser.parse_args()
     thread_id = args.thread
-    page_number = args.page
+    page_numbers = args.pages
     output_folder_path = args.output_folder
 
     import copy
@@ -26,22 +26,30 @@ if __name__ == "__main__":
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
 
+    page_numbers_actual = set()
+    if page_numbers is not None:
+        for page_range in page_numbers.split(","):
+            for page in range(
+                int(page_range.split("-")[0]),
+                int(page_range.split("-")[-1]) + 1,
+            ):
+                page_numbers_actual.add(page)
+
     scrape_time_str = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
     image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
     page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
 
     logger.info(
-        f"Scraping {'page ' + page_number if page_number is not None else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.thread_folder_path}"
+        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.thread_folder_path}"
     )
 
-    if page_number is None:
+    if len(page_numbers_actual) == 0:
         pages = scrapers.scrape_thread(thread_id, open_new_tab=True)
     else:
         pages = scrapers.scrape_pages(
             thread_id,
-            start_page_number=page_number,
-            end_page_number=page_number,
+            page_numbers=page_numbers_actual,
             open_new_tab=True,
         )
 
