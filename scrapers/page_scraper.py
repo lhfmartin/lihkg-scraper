@@ -18,9 +18,9 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
 
     performance_logs_filtered = []
     TIMEOUT = 5
-    t_0 = time.time()
+    t_0 = time.perf_counter()
     while len(performance_logs_filtered) < 1:
-        if time.time() - t_0 > TIMEOUT:
+        if time.perf_counter() - t_0 > TIMEOUT:
             logger.error(f"Timeout exceeded")
             break
         performance_logs = driver.get_log("performance")
@@ -37,7 +37,7 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
         ]
 
         performance_logs_filtered += performance_logs
-        time.sleep(2)
+        time.sleep(0.1)
 
     assert len(performance_logs_filtered) == 1
 
