@@ -12,6 +12,10 @@ URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https:\/\/www\.youtube\.com\/watch\?v=",
     "^https:\/\/i\.lih\.kg\/thumbnail",
 ]
+REQUEST_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+}
+REQUEST_TIMEOUT = 120
 
 logger = logging.getLogger("lihkg-scraper")
 
@@ -44,6 +48,8 @@ def download_images(thread_dao, image_dao):
         IMAGE_DOWNLOAD_STATUS_FAILED: {},
     }
 
+    session = requests.Session()
+
     for x in urls:
         if x in images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED]:
             continue
@@ -52,7 +58,11 @@ def download_images(thread_dao, image_dao):
             continue
 
         try:
-            response = requests.get(build_absolute_url_from_url(x))
+            response = session.get(
+                build_absolute_url_from_url(x),
+                headers=REQUEST_HEADERS,
+                timeout=REQUEST_TIMEOUT,
+            )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             logger.debug(f"Failed to download {x}")
