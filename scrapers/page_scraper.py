@@ -15,16 +15,18 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
     page_url = f"{thread_url}/page/{page_number}"
     logger.debug(f"Scraping {page_url}")
 
-    if driver.current_url.startswith(thread_url) and page_number % 7 != 0:
+    if driver.current_url.startswith(thread_url) and scrape_page.dom_reuse_count < 6:
         # Navigating to a different page using the drop down list prevents triggering of Cloudflare Turnstile
-        # The page is still reloaded when `page_number % 7 != 0` to reduce RAM usage
+        # The page is still reloaded when the current DOM is reused 6 times (i.e. 7 pages have been rendered) to reduce RAM usage
         page_select = Select(driver.find_elements(By.TAG_NAME, "select")[-2])
         page_select.select_by_value(str(page_number))
+        scrape_page.dom_reuse_count += 1
     else:
         if open_new_tab:
             driver.switch_to.new_window("tab")
 
         driver.get(page_url)
+        scrape_page.dom_reuse_count = 0
 
     performance_logs_filtered = []
     TIMEOUT = 5
@@ -56,3 +58,6 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
     res_url = log["params"]["response"]["url"]
     res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
     return json.loads(res["body"])
+
+
+scrape_page.dom_reuse_count = 0
