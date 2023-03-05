@@ -11,6 +11,9 @@ logger = logging.getLogger("lihkg-scraper")
 
 
 def scrape_page(thread_id, page_number, open_new_tab=False):
+    if open_new_tab:
+        driver.switch_to.new_window("tab")
+
     thread_url = f"https://lihkg.com/thread/{thread_id}"
     page_url = f"{thread_url}/page/{page_number}"
     logger.debug(f"Scraping {page_url}")
@@ -22,9 +25,6 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
         page_select.select_by_value(str(page_number))
         scrape_page.dom_reuse_count += 1
     else:
-        if open_new_tab:
-            driver.switch_to.new_window("tab")
-
         driver.get(page_url)
         scrape_page.dom_reuse_count = 0
 
@@ -57,6 +57,9 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
     req_id = log["params"]["requestId"]
     res_url = log["params"]["response"]["url"]
     res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
+
+    if open_new_tab:
+        driver.close()
     return json.loads(res["body"])
 
 

@@ -36,3 +36,6 @@ def scrape_pages(
                 break
         else:
             page_number += 1
+
+    if open_new_tab:
+        driver.close()
