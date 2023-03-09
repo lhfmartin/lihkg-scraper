@@ -11,6 +11,8 @@ IMAGE_DOWNLOAD_STATUS_FAILED = "failed"
 URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https:\/\/www\.youtube\.com\/watch\?v=",
     "^https:\/\/i\.lih\.kg\/thumbnail",
+    "^https:\/\/lihkg\.com\/thread\/",
+    "^https:\/\/lih\.kg\/",
 ]
 REQUEST_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
