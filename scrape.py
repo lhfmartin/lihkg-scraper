@@ -47,12 +47,11 @@ if __name__ == "__main__":
     )
 
     if len(page_numbers_actual) == 0:
-        pages = scrapers.scrape_thread(thread_id, open_new_tab=True)
+        pages = scrapers.scrape_thread(thread_id)
     else:
         pages = scrapers.scrape_pages(
             thread_id,
             page_numbers=page_numbers_actual,
-            open_new_tab=True,
         )
 
     for page_number, page_data in pages:

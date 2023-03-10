@@ -8,10 +8,11 @@ def scrape_pages(
     start_page_number=1,
     end_page_number=None,
     page_numbers=(),
-    open_new_tab=False,
+    tab=None,
 ):
+    open_new_tab = True if tab is None else False
     if open_new_tab:
-        page = browser.new_page()
+        tab = browser.new_page()
 
     if len(page_numbers) > 0:
         page_numbers = iter(sorted(page_numbers))
@@ -19,7 +20,7 @@ def scrape_pages(
 
     page_number = start_page_number
     while True:
-        page_data = scrape_page(thread_id, page_number, page=page)
+        page_data = scrape_page(thread_id, page_number, tab=tab)
         yield (page_number, page_data)
         if (
             page_number == int(page_data["response"]["total_page"])
@@ -38,4 +39,4 @@ def scrape_pages(
             page_number += 1
 
     if open_new_tab:
-        page.close()
+        tab.close()
