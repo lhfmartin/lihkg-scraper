@@ -1,5 +1,5 @@
+from browsers import browser
 from collections.abc import Iterator
-from drivers import driver
 from scrapers.page_scraper import scrape_page
 
 
@@ -11,7 +11,7 @@ def scrape_pages(
     open_new_tab=False,
 ):
     if open_new_tab:
-        driver.switch_to.new_window("tab")
+        page = browser.new_page()
 
     if len(page_numbers) > 0:
         page_numbers = iter(sorted(page_numbers))
@@ -19,7 +19,7 @@ def scrape_pages(
 
     page_number = start_page_number
     while True:
-        page_data = scrape_page(thread_id, page_number)
+        page_data = scrape_page(thread_id, page_number, page=page)
         yield (page_number, page_data)
         if (
             page_number == int(page_data["response"]["total_page"])
@@ -38,4 +38,4 @@ def scrape_pages(
             page_number += 1
 
     if open_new_tab:
-        driver.close()
+        page.close()
