@@ -2,7 +2,7 @@
 
 Download LIHKG threads (aka posts) and pages in json format.
 
-The approach is selenium will connect to the local Chrome browser via [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) and "overheard" the traffic between the browser and the LIHKG server, so that the very same API response which is used to render the LIHKG web app could be seen by selenium. Image urls will be parsed at the end of the script and downloaded separately.
+The approach is playwright will connect to the local Chrome browser via [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) and "overheard" the traffic between the browser and the LIHKG server, so that the very same API response which is used to render the LIHKG web app could be seen by playwright. Image urls will be parsed at the end of the script and downloaded separately.
 
 ## Setting up
 
