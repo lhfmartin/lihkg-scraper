@@ -26,7 +26,7 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
     ):
         # Navigating to a different page using the drop down list prevents triggering of Cloudflare Turnstile
         # The page is still reloaded when the current DOM is reused 6 - 10 times (i.e. 7 - 11 pages have been rendered) to reduce RAM usage
-        page_select = Select(driver.find_elements(By.TAG_NAME, "select")[-2])
+        page_select = Select(driver.find_elements(By.CSS_SELECTOR, "select:not([class])")[-1])
         page_select.select_by_value(str(page_number))
         scrape_page.dom_reuse_count += 1
     else:
