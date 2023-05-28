@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 import json
 import logging
 import re
@@ -10,7 +11,6 @@ IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
 IMAGE_DOWNLOAD_STATUS_FAILED = "failed"
 URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https:\/\/www\.youtube\.com\/watch\?v=",
-    "^https:\/\/i\.lih\.kg\/thumbnail",
     "^https:\/\/lihkg\.com\/thread\/",
     "^https:\/\/lih\.kg\/",
 ]
@@ -40,9 +40,14 @@ def build_absolute_url_from_url(url):
 def download_images(thread_dao, image_dao):
     messages = thread_dao.load_messages()
 
-    urls = re.findall(
-        r"(?:src|href)=\\\"(.*?)\\\"", json.dumps(messages, ensure_ascii=False)
+    soup = BeautifulSoup(
+        "\n".join(message["msg"] for message in messages), features="html.parser"
     )
+
+    urls = [
+        element.get("src") or element.get("href")
+        for element in soup.find_all(["img", "a"])
+    ]
     # The urls will also contain links in <a> tag that can link to non-images
 
     images_downloads = {
