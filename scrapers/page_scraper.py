@@ -34,7 +34,7 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
         scrape_page.dom_reuse_count = 0
 
     performance_logs_filtered = []
-    TIMEOUT = 5
+    TIMEOUT = 60
     t_0 = time.perf_counter()
     while len(performance_logs_filtered) < 1:
         if time.perf_counter() - t_0 > TIMEOUT:
