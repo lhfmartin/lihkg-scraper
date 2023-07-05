@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     import scrapers
     from dao import ImageDao, PageDao, ThreadDao
-    from post_processing import consolidate_messages, download_images
+    from postprocessing import consolidate_messages, download_images
 
     LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
     logger = logging.getLogger("lihkg-scraper")
