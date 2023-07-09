@@ -7,12 +7,12 @@ def consolidate_messages(page_dao, thread_dao):
         messages = page["response"]["item_data"]
         all_messages += messages
 
-    if all_messages[0]["msg_num"] == "1":
+    if all_messages[0]["msg_num"] == 1:
         topic = thread_dao.load_topic()
         like_count, dislike_count = topic["like_count"], topic["dislike_count"]
-        all_messages[0]["like_count"] = str(like_count)
-        all_messages[0]["dislike_count"] = str(dislike_count)
-        all_messages[0]["vote_score"] = str(like_count - dislike_count)
+        all_messages[0]["like_count"] = like_count
+        all_messages[0]["dislike_count"] = dislike_count
+        all_messages[0]["vote_score"] = like_count - dislike_count
 
     thread_dao.save_messages(all_messages)
 
