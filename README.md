@@ -8,13 +8,14 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
 
 1. Install required packages using `pip install -r requirements.txt`
 2. Install Google Chrome (if not yet installed)
-3. To scrape member-only contents (eg. threads in 成人台 / 留言嘅加密部分), log in to LIHKG in Google Chrome
+3. *(Optional)* To scrape member-only contents (eg. threads in 成人台 / 留言嘅加密部分), log in to LIHKG in Google Chrome
+4. *(Optional)* To override the default config properties defined in `config/config.default.ini`, create a copy of it and rename the new file to `config/config.ini`, and edit the values in the new file
 
 ## Using the program
 
 1. Quit Google Chrome if it is opened
 2. Open Google Chrome with `--remote-debugging-port=9222` passed into the command line arguments.
-    - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in `config/config.ini` if other ports is used.
+    - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in the config file if another port is used
 3. Run `python scrape.py -t <thread-id> [-p <page-numbers>] [-o <output-folder>] [--remove-me]`
     - `-t <thread-id>` is required
     - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\

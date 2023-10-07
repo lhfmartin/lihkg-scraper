@@ -132,3 +132,5 @@ dmypy.json
 
 output/*
 !output/.keep
+
+config/config.ini
