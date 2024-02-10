@@ -8,6 +8,8 @@ from selenium.webdriver.support.ui import Select
 from drivers import driver
 
 
+PAGE_LOADING_TIMEOUT = 60
+
 logger = logging.getLogger("lihkg-scraper")
 
 
@@ -26,7 +28,9 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
     ):
         # Navigating to a different page using the drop down list prevents triggering of Cloudflare Turnstile
         # The page is still reloaded when the current DOM is reused 6 - 10 times (i.e. 7 - 11 pages have been rendered) to reduce RAM usage
-        page_select = Select(driver.find_elements(By.CSS_SELECTOR, "select:not([class])")[-1])
+        page_select = Select(
+            driver.find_elements(By.CSS_SELECTOR, "select:not([class])")[-1]
+        )
         page_select.select_by_value(str(page_number))
         scrape_page.dom_reuse_count += 1
     else:
@@ -34,10 +38,10 @@ def scrape_page(thread_id, page_number, open_new_tab=False):
         scrape_page.dom_reuse_count = 0
 
     performance_logs_filtered = []
-    TIMEOUT = 60
+
     t_0 = time.perf_counter()
     while len(performance_logs_filtered) < 1:
-        if time.perf_counter() - t_0 > TIMEOUT:
+        if time.perf_counter() - t_0 > PAGE_LOADING_TIMEOUT:
             logger.error(f"Timeout exceeded")
             break
         performance_logs = driver.get_log("performance")
