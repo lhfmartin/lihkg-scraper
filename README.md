@@ -22,3 +22,7 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
     Examples: `-p 1` / `-p 1-5,8,11-13`
     - `-o <output-folder>` is optional, will save the output to `output` if not provided
     - `--remove-me` is optional, will remove the logged in user data (if any) from the output
+
+## Viewing the output
+
+To view the output in a human-readable manner, use the web app [LIHKG Snapshot Viewer](https://lhfmartin.github.io/lihkg-snapshot-viewer/) (repository: [lihkg-snapshot-viewer](https://github.com/lhfmartin/lihkg-snapshot-viewer))
