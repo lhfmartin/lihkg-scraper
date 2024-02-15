@@ -19,7 +19,11 @@ if __name__ == "__main__":
 
     import scrapers
     from dao import ImageDao, PageDao, ThreadDao
-    from postprocessing import consolidate_messages, download_images
+    from postprocessing import (
+        remove_logged_in_user_data,
+        consolidate_messages,
+        download_images,
+    )
 
     LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
     logger = logging.getLogger("lihkg-scraper")
@@ -62,10 +66,13 @@ if __name__ == "__main__":
     thread_data = copy.deepcopy(page_data["response"])
     del thread_data["page"]
     del thread_data["item_data"]
-    if remove_me and "me" in thread_data:
-        del thread_data["me"]
-
     thread_dao.save_topic(thread_data)
+
+    # Postprocessing
+
+    # Remove the user data of the logged-in user, shall be done before consolidate_messages
+    if remove_me:
+        remove_logged_in_user_data(thread_dao, page_dao)
 
     # Consolidate messages and write to messages.json
     consolidate_messages(page_dao, thread_dao)
