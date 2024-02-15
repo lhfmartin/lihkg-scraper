@@ -9,6 +9,7 @@ def remove_logged_in_user_data_from_thread_data(thread_data):
 
 
 def remove_logged_in_user_data_from_page_data(page_data):
+    page_data["response"].pop("vote_status", None)
     messages = page_data["response"]["item_data"]
     for message in messages:
         while message.pop("vote_status", None) is not None:
