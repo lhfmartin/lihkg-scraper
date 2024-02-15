@@ -3,6 +3,7 @@ if __name__ == "__main__":
 
     class PostProcessingActions(Enum):
         ALL = "all"
+        REMOVE_ME = "remove_me"
         CONSOLIDATE_MESSAGES = "consolidate_messages"
         DOWNLOAD_IMAGES = "download_images"
 
@@ -31,7 +32,11 @@ if __name__ == "__main__":
     import sys
 
     from dao import ImageDao, PageDao, ThreadDao
-    from postprocessing import consolidate_messages, download_images
+    from postprocessing import (
+        remove_logged_in_user_data,
+        consolidate_messages,
+        download_images,
+    )
 
     LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
     logger = logging.getLogger("lihkg-scraper")
@@ -53,6 +58,12 @@ if __name__ == "__main__":
     page_dao = PageDao(
         Path(folder).parent, folder.split("_")[-2], folder.split("_")[-1]
     )
+
+    if PostProcessingActions.REMOVE_ME in actions:
+        logger.info(
+            f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.thread_folder_path}"
+        )
+        remove_logged_in_user_data(thread_dao, page_dao)
 
     if PostProcessingActions.CONSOLIDATE_MESSAGES in actions:
         logger.info(
