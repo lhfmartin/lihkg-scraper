@@ -34,7 +34,7 @@ def url_matches_skip_download_patterns(url):
 def build_absolute_url_from_url(url):
     if bool(urlparse(url).netloc):
         return url  # url is absolute url
-    return "http://lihkg.com" + ("" if url.startswith("/") else "/") + url
+    return "https://lihkg.com" + ("" if url.startswith("/") else "/") + url
 
 
 def download_images(thread_dao, image_dao):
