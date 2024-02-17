@@ -64,17 +64,26 @@ if __name__ == "__main__":
             f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.thread_folder_path}"
         )
         remove_logged_in_user_data(thread_dao, page_dao)
+        logger.info(
+            f"Completed {PostProcessingActions.REMOVE_ME} on {thread_dao.thread_folder_path}"
+        )
 
     if PostProcessingActions.CONSOLIDATE_MESSAGES in actions:
         logger.info(
             f"Performing {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.thread_folder_path}"
         )
         consolidate_messages(page_dao, thread_dao)
+        logger.info(
+            f"Completed {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.thread_folder_path}"
+        )
 
     if PostProcessingActions.DOWNLOAD_IMAGES in actions:
         logger.info(
             f"Performing {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.thread_folder_path}"
         )
         download_images(thread_dao, image_dao)
+        logger.info(
+            f"Completed {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.thread_folder_path}"
+        )
 
     logger.info("Done")
