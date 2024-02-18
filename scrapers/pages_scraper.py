@@ -4,12 +4,12 @@ from scrapers.page_scraper import scrape_page
 
 
 def scrape_pages(
-    thread_id,
-    start_page_number=1,
-    end_page_number=None,
-    page_numbers=(),
-    open_new_tab=False,
-):
+    thread_id: str,
+    start_page_number: int = 1,
+    end_page_number: int | None = None,
+    page_numbers: list | set | tuple = (),
+    open_new_tab: bool = False,
+) -> Iterator[tuple[int, dict]]:
     if open_new_tab:
         driver.switch_to.new_window("tab")
 

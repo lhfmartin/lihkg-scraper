@@ -6,6 +6,8 @@ import requests
 import uuid
 from urllib.parse import urlparse
 
+from dao import ThreadDao, ImageDao
+
 
 IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
 IMAGE_DOWNLOAD_STATUS_FAILED = "failed"
@@ -22,7 +24,7 @@ REQUEST_TIMEOUT = 120
 logger = logging.getLogger("lihkg-scraper")
 
 
-def url_matches_skip_download_patterns(url):
+def url_matches_skip_download_patterns(url: str) -> bool:
     return any(
         [
             bool(re.search(pattern, url, re.IGNORECASE))
@@ -31,13 +33,13 @@ def url_matches_skip_download_patterns(url):
     )
 
 
-def build_absolute_url_from_url(url):
+def build_absolute_url_from_url(url: str) -> str:
     if bool(urlparse(url).netloc):
         return url  # url is absolute url
     return "https://lihkg.com" + ("" if url.startswith("/") else "/") + url
 
 
-def download_images(thread_dao, image_dao):
+def download_images(thread_dao: ThreadDao, image_dao: ImageDao) -> dict:
     messages = thread_dao.load_messages()
 
     soup = BeautifulSoup(

@@ -7,7 +7,7 @@ from .Dao import Dao
 
 
 class PageDao(Dao):
-    def __init__(self, output_folder_path, thread_id, scrape_time_str):
+    def __init__(self, output_folder_path: str, thread_id: str, scrape_time_str: str):
         super().__init__(output_folder_path, thread_id, scrape_time_str)
         self.thread_pages_raw_jsons_folder_path = os.path.join(
             self.thread_folder_path, "pages"
@@ -16,7 +16,7 @@ class PageDao(Dao):
             parents=True, exist_ok=True
         )
 
-    def save_page(self, page_number, page_data):
+    def save_page(self, page_number: int, page_data: dict) -> None:
         with open(
             os.path.join(
                 self.thread_pages_raw_jsons_folder_path, f"page_{page_number}.json"
@@ -26,7 +26,7 @@ class PageDao(Dao):
             json.dump(page_data, f, ensure_ascii=False)
             f.write("\n")
 
-    def load_page(self, page_number):
+    def load_page(self, page_number: int) -> None:
         with open(
             os.path.join(
                 self.thread_pages_raw_jsons_folder_path, f"page_{page_number}.json"
@@ -36,7 +36,7 @@ class PageDao(Dao):
             page = json.load(f)
         return page
 
-    def get_available_page_numbers(self):
+    def get_available_page_numbers(self) -> list[int]:
         page_numbers = set()
 
         for x in os.listdir(self.thread_pages_raw_jsons_folder_path):

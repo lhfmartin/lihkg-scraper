@@ -1,4 +1,7 @@
-def consolidate_messages(page_dao, thread_dao):
+from dao import PageDao, ThreadDao
+
+
+def consolidate_messages(page_dao: PageDao, thread_dao: ThreadDao) -> list[dict]:
     page_numbers = page_dao.get_available_page_numbers()
 
     all_messages = []

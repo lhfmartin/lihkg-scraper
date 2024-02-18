@@ -1,4 +1,7 @@
-def _remove_logged_in_user_data_from_thread_data(thread_data):
+from dao import ThreadDao, PageDao
+
+
+def _remove_logged_in_user_data_from_thread_data(thread_data: dict) -> None:
     thread_data.pop("me", None)
     thread_data.pop("vote_status", None)
     thread_data.pop("is_bookmarked", None)
@@ -12,20 +15,20 @@ def _remove_logged_in_user_data_from_thread_data(thread_data):
         _remove_logged_in_user_data_from_thread_data(x)
 
 
-def _remove_logged_in_user_data_from_messages(messages):
+def _remove_logged_in_user_data_from_messages(messages: list[dict]) -> None:
     for message in messages:
         while message.pop("vote_status", None) is not None:
             message = message.get("quote", {})
 
 
-def _remove_logged_in_user_data_from_page_data(page_data):
+def _remove_logged_in_user_data_from_page_data(page_data: dict) -> None:
     _remove_logged_in_user_data_from_thread_data(page_data["response"])
 
     messages = page_data["response"]["item_data"]
     _remove_logged_in_user_data_from_messages(messages)
 
 
-def remove_logged_in_user_data(thread_dao, page_dao):
+def remove_logged_in_user_data(thread_dao: ThreadDao, page_dao: PageDao) -> None:
     topic = thread_dao.load_topic()
     _remove_logged_in_user_data_from_thread_data(topic)
     thread_dao.save_topic(topic)

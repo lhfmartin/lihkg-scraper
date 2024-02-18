@@ -13,7 +13,7 @@ PAGE_LOADING_TIMEOUT = 60
 logger = logging.getLogger("lihkg-scraper")
 
 
-def scrape_page(thread_id, page_number, open_new_tab=False):
+def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) -> dict:
     if open_new_tab:
         driver.switch_to.new_window("tab")
 
