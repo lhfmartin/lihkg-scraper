@@ -1,6 +1,12 @@
 from dao import ThreadDao, PageDao
 
 
+def _remove_logged_in_user_data_from_poster_data(poster_data: dict) -> None:
+    poster_data.pop("is_following", None)
+    poster_data.pop("is_blocked", None)
+    poster_data.pop("is_disappear", None)
+
+
 def _remove_logged_in_user_data_from_thread_data(thread_data: dict) -> None:
     thread_data.pop("me", None)
     thread_data.pop("vote_status", None)
@@ -8,9 +14,16 @@ def _remove_logged_in_user_data_from_thread_data(thread_data: dict) -> None:
     thread_data.pop("is_replied", None)
     thread_data.pop("last_read", None)
     thread_data.pop("last_replied", None)
+    _remove_logged_in_user_data_from_poster_data(thread_data.get("user", {}))
+
     thread_data.get("pinned_post", {}).pop("vote_status", None)
+    _remove_logged_in_user_data_from_poster_data(
+        thread_data.get("pinned_post", {}).get("user", {})
+    )
+
     if "parent_thread" in thread_data:
         _remove_logged_in_user_data_from_thread_data(thread_data["parent_thread"])
+
     for x in thread_data.get("child_threads", []):
         _remove_logged_in_user_data_from_thread_data(x)
 
@@ -18,6 +31,7 @@ def _remove_logged_in_user_data_from_thread_data(thread_data: dict) -> None:
 def _remove_logged_in_user_data_from_messages(messages: list[dict]) -> None:
     for message in messages:
         while message.pop("vote_status", None) is not None:
+            _remove_logged_in_user_data_from_poster_data(message.get("user", {}))
             message = message.get("quote", {})
 
 
