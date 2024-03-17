@@ -1,14 +1,11 @@
 import logging
-import json
-import time
 from random import randint
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 from drivers import driver
+from scrapers.utils import listen_network_responses
 
-
-PAGE_LOADING_TIMEOUT = 60
 
 logger = logging.getLogger("lihkg-scraper")
 
@@ -37,39 +34,12 @@ def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) ->
         driver.get(page_url)
         scrape_page.dom_reuse_count = 0
 
-    performance_logs_filtered = []
-
-    t_0 = time.perf_counter()
-    while len(performance_logs_filtered) < 1:
-        if time.perf_counter() - t_0 > PAGE_LOADING_TIMEOUT:
-            logger.error(f"Timeout exceeded")
-            break
-        performance_logs = driver.get_log("performance")
-        performance_logs = [
-            json.loads(pl["message"])["message"] for pl in performance_logs
-        ]
-
-        performance_logs = [
-            pl
-            for pl in performance_logs
-            if pl["method"] == "Network.responseReceived"
-            and "json" in pl["params"]["response"]["mimeType"]
-            and f"{thread_id}/page/{page_number}" in pl["params"]["response"]["url"]
-        ]
-
-        performance_logs_filtered += performance_logs
-        time.sleep(0.1)
-
-    assert len(performance_logs_filtered) == 1
-
-    log = performance_logs_filtered[0]
-    req_id = log["params"]["requestId"]
-    res_url = log["params"]["response"]["url"]
-    res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
+    page_data = listen_network_responses(driver, [f"{thread_id}/page/{page_number}"])
 
     if open_new_tab:
         driver.close()
-    return json.loads(res["body"])
+
+    return page_data
 
 
 scrape_page.dom_reuse_count = 0
