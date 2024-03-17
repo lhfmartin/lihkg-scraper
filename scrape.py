@@ -15,7 +15,6 @@ if __name__ == "__main__":
     import copy
     from datetime import datetime, timezone
     import logging
-    import sys
 
     import scrapers
     from dao import ImageDao, PageDao, ThreadDao
@@ -24,13 +23,10 @@ if __name__ == "__main__":
         consolidate_messages,
         download_images,
     )
+    from logger import initialize_logger
 
-    LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
+    initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
 
     page_numbers_actual = set()
     if page_numbers is not None:

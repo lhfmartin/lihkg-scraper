@@ -27,9 +27,7 @@ if __name__ == "__main__":
     actions = args.actions
 
     import logging
-    import os
     from pathlib import Path
-    import sys
 
     from dao import ImageDao, PageDao, ThreadDao
     from postprocessing import (
@@ -37,13 +35,10 @@ if __name__ == "__main__":
         consolidate_messages,
         download_images,
     )
+    from logger import initialize_logger
 
-    LOG_FORMAT = "%(asctime)s %(filename)s [%(levelname)s] %(message)s"
+    initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
 
     actions = [PostProcessingActions(x) for x in actions]
     if PostProcessingActions.ALL in actions:
