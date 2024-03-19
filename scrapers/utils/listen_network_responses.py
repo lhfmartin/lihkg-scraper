@@ -15,7 +15,9 @@ def _url_matches_patterns(url: str, patterns: list[str]) -> bool:
     return any([bool(re.search(pattern, url)) for pattern in patterns])
 
 
-def listen_network_responses(url_patterns: list[str]) -> dict | list:
+def listen_network_responses(
+    url_patterns: list[str],
+) -> tuple[str, str | int | float | dict | list]:
     performance_logs_filtered = []
 
     t_0 = time.perf_counter()
@@ -45,4 +47,4 @@ def listen_network_responses(url_patterns: list[str]) -> dict | list:
     req_id = log["params"]["requestId"]
     res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
 
-    return json.loads(res["body"])
+    return log["params"]["response"]["url"], json.loads(res["body"])
