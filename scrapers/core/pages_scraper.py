@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 from drivers import driver
-from scrapers.page_scraper import scrape_page
+from scrapers.core.page_scraper import scrape_page
 
 
 def scrape_pages(
