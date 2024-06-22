@@ -45,15 +45,20 @@ if __name__ == "__main__":
     if PostProcessingActions.ALL in actions:
         actions = [x for x in PostProcessingActions]
 
+    path = Path(folder)
+
+    if not (path.exists() and path.is_dir()):
+        raise FileNotFoundError(f"'{folder}' does not exist or is not a directory")
+
     artifact_metadata = ArtifactMetadata(
-        Path(folder).name.split("_")[0],
-        Path(folder).name.split("_", 1)[1].rsplit("_", 1)[0],
-        Path(folder).name.split("_")[-1],
+        path.name.split("_")[0],
+        path.name.split("_", 1)[1].rsplit("_", 1)[0],
+        path.name.split("_")[-1],
     )
 
-    thread_dao = ThreadDao(Path(folder).parent, artifact_metadata)
-    image_dao = ImageDao(Path(folder).parent, artifact_metadata)
-    page_dao = PageDao(Path(folder).parent, artifact_metadata)
+    thread_dao = ThreadDao(path.parent, artifact_metadata)
+    image_dao = ImageDao(path.parent, artifact_metadata)
+    page_dao = PageDao(path.parent, artifact_metadata)
 
     if PostProcessingActions.REMOVE_ME in actions:
         logger.info(
