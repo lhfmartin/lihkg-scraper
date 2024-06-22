@@ -27,7 +27,7 @@ class PageDao(Dao):
             json.dump(page_data, f, ensure_ascii=False)
             f.write("\n")
 
-    def load_page(self, page_number: int) -> None:
+    def load_page(self, page_number: int) -> dict:
         with open(
             os.path.join(
                 self.thread_pages_raw_jsons_folder_path, f"page_{page_number}.json"
