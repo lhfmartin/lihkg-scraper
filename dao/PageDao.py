@@ -4,13 +4,14 @@ import pathlib
 import re
 
 from .Dao import Dao
+from models import ArtifactMetadata
 
 
 class PageDao(Dao):
-    def __init__(self, output_folder_path: str, thread_id: str, scrape_time_str: str):
-        super().__init__(output_folder_path, thread_id, scrape_time_str)
+    def __init__(self, output_folder_path: str, artifact_metadata: ArtifactMetadata):
+        super().__init__(output_folder_path, artifact_metadata)
         self.thread_pages_raw_jsons_folder_path = os.path.join(
-            self.thread_folder_path, "pages"
+            self.folder_path, "pages"
         )
         pathlib.Path(self.thread_pages_raw_jsons_folder_path).mkdir(
             parents=True, exist_ok=True

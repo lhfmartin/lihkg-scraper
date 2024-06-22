@@ -2,12 +2,13 @@ import os
 import pathlib
 
 from .Dao import Dao
+from models import ArtifactMetadata
 
 
 class ImageDao(Dao):
-    def __init__(self, output_folder_path: str, thread_id: str, scrape_time_str: str):
-        super().__init__(output_folder_path, thread_id, scrape_time_str)
-        self.thread_images_folder_path = os.path.join(self.thread_folder_path, "images")
+    def __init__(self, output_folder_path: str, artifact_metadata: ArtifactMetadata):
+        super().__init__(output_folder_path, artifact_metadata)
+        self.thread_images_folder_path = os.path.join(self.folder_path, "images")
         pathlib.Path(self.thread_images_folder_path).mkdir(parents=True, exist_ok=True)
 
     def save_image(self, file_name: str, image_binary: bytes) -> None:

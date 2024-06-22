@@ -36,6 +36,7 @@ if __name__ == "__main__":
         download_images,
     )
     from logger import initialize_logger
+    from models import ArtifactMetadata
 
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
@@ -44,41 +45,41 @@ if __name__ == "__main__":
     if PostProcessingActions.ALL in actions:
         actions = [x for x in PostProcessingActions]
 
-    thread_dao = ThreadDao(
-        Path(folder).parent, folder.split("_")[-2], folder.split("_")[-1]
+    artifact_metadata = ArtifactMetadata(
+        Path(folder).name.split("_")[0],
+        Path(folder).name.split("_", 1)[1].rsplit("_", 1)[0],
+        Path(folder).name.split("_")[-1],
     )
-    image_dao = ImageDao(
-        Path(folder).parent, folder.split("_")[-2], folder.split("_")[-1]
-    )
-    page_dao = PageDao(
-        Path(folder).parent, folder.split("_")[-2], folder.split("_")[-1]
-    )
+
+    thread_dao = ThreadDao(Path(folder).parent, artifact_metadata)
+    image_dao = ImageDao(Path(folder).parent, artifact_metadata)
+    page_dao = PageDao(Path(folder).parent, artifact_metadata)
 
     if PostProcessingActions.REMOVE_ME in actions:
         logger.info(
-            f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.thread_folder_path}"
+            f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.folder_path}"
         )
         remove_logged_in_user_data(thread_dao, page_dao)
         logger.info(
-            f"Completed {PostProcessingActions.REMOVE_ME} on {thread_dao.thread_folder_path}"
+            f"Completed {PostProcessingActions.REMOVE_ME} on {thread_dao.folder_path}"
         )
 
     if PostProcessingActions.CONSOLIDATE_MESSAGES in actions:
         logger.info(
-            f"Performing {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.thread_folder_path}"
+            f"Performing {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.folder_path}"
         )
         consolidate_messages(page_dao, thread_dao)
         logger.info(
-            f"Completed {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.thread_folder_path}"
+            f"Completed {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.folder_path}"
         )
 
     if PostProcessingActions.DOWNLOAD_IMAGES in actions:
         logger.info(
-            f"Performing {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.thread_folder_path}"
+            f"Performing {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.folder_path}"
         )
         download_images(thread_dao, image_dao)
         logger.info(
-            f"Completed {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.thread_folder_path}"
+            f"Completed {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.folder_path}"
         )
 
     logger.info("Done")

@@ -3,7 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
 from drivers import driver
-from scrapers.utils import listen_network_responses, determine_left_panel_category
+from scrapers.utils import (
+    listen_network_responses,
+    determine_left_panel_content_identifier,
+)
 
 
 logger = logging.getLogger("lihkg-scraper")
@@ -55,9 +58,11 @@ def scrape_left_panel(
     if limit is not None:
         topics = topics[:limit]
 
-    left_panel_category = determine_left_panel_category(res_url, res_body_relevant)
+    left_panel_content_identifier = determine_left_panel_content_identifier(
+        res_url, res_body_relevant
+    )
 
     if open_new_tab:
         driver.close()
 
-    return left_panel_category, topics
+    return left_panel_content_identifier, topics

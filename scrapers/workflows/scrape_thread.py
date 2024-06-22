@@ -10,6 +10,7 @@ from postprocessing import (
     download_images,
 )
 from logger import initialize_logger
+from models import ArtifactMetadata
 
 
 def scrape_thread(
@@ -28,12 +29,14 @@ def scrape_thread(
                 page_numbers_actual.add(page)
 
     scrape_time_str = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    thread_dao = ThreadDao(output_folder_path, thread_id, scrape_time_str)
-    image_dao = ImageDao(output_folder_path, thread_id, scrape_time_str)
-    page_dao = PageDao(output_folder_path, thread_id, scrape_time_str)
+    artifact_metadata = ArtifactMetadata("thread", thread_id, scrape_time_str)
+
+    thread_dao = ThreadDao(output_folder_path, artifact_metadata)
+    image_dao = ImageDao(output_folder_path, artifact_metadata)
+    page_dao = PageDao(output_folder_path, artifact_metadata)
 
     logger.info(
-        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.thread_folder_path}"
+        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.folder_path}"
     )
 
     if len(page_numbers_actual) == 0:
@@ -66,6 +69,4 @@ def scrape_thread(
     # Download images and save images and image mappings to images/ and images.json respectively
     download_images(thread_dao, image_dao)
 
-    logger.info(
-        f"Scraping completed. Data have been saved to {thread_dao.thread_folder_path}"
-    )
+    logger.info(f"Scraping completed. Data have been saved to {thread_dao.folder_path}")
