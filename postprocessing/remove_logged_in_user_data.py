@@ -1,4 +1,7 @@
-from dao import ThreadDao, PageDao
+from functools import singledispatch
+
+
+from dao import ThreadDao, PageDao, TopicListDao
 
 
 def _remove_logged_in_user_data_from_poster_data(poster_data: dict) -> None:
@@ -42,7 +45,13 @@ def _remove_logged_in_user_data_from_page_data(page_data: dict) -> None:
     _remove_logged_in_user_data_from_messages(messages)
 
 
-def remove_logged_in_user_data(thread_dao: ThreadDao, page_dao: PageDao) -> None:
+@singledispatch
+def remove_logged_in_user_data() -> None:
+    pass
+
+
+@remove_logged_in_user_data.register
+def _remove_logged_in_user_data(thread_dao: ThreadDao, page_dao: PageDao) -> None:
     topic = thread_dao.load_topic()
     _remove_logged_in_user_data_from_thread_data(topic)
     thread_dao.save_topic(topic)
@@ -59,3 +68,11 @@ def remove_logged_in_user_data(thread_dao: ThreadDao, page_dao: PageDao) -> None
         thread_dao.save_messages(messages)
     except FileNotFoundError:
         pass
+
+
+@remove_logged_in_user_data.register
+def _remove_logged_in_user_data(topic_list_dao: TopicListDao) -> None:
+    topic_list = topic_list_dao.load_topic_list()
+    for topic in topic_list:
+        _remove_logged_in_user_data_from_thread_data(topic)
+    topic_list_dao.save_topic_list(topic_list)

@@ -15,7 +15,7 @@ from models import ArtifactMetadata
 
 def scrape_thread(
     thread_id: str, page_numbers: str, output_folder_path: str, remove_me: bool
-):
+) -> None:
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
 
