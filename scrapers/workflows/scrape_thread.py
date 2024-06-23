@@ -36,7 +36,7 @@ def scrape_thread(
     page_dao = PageDao(output_folder_path, artifact_metadata)
 
     logger.info(
-        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.folder_path}"
+        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.artifact_folder_path}"
     )
 
     if len(page_numbers_actual) == 0:
@@ -69,4 +69,6 @@ def scrape_thread(
     # Download images and save images and image mappings to images/ and images.json respectively
     download_images(thread_dao, image_dao)
 
-    logger.info(f"Scraping completed. Data have been saved to {thread_dao.folder_path}")
+    logger.info(
+        f"Scraping completed. Data have been saved to {thread_dao.artifact_folder_path}"
+    )

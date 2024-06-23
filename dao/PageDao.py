@@ -11,7 +11,7 @@ class PageDao(Dao):
     def __init__(self, output_folder_path: str, artifact_metadata: ArtifactMetadata):
         super().__init__(output_folder_path, artifact_metadata)
         self.thread_pages_raw_jsons_folder_path = os.path.join(
-            self.folder_path, "pages"
+            self.artifact_folder_path, "pages"
         )
         pathlib.Path(self.thread_pages_raw_jsons_folder_path).mkdir(
             parents=True, exist_ok=True
