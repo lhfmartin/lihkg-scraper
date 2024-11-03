@@ -16,12 +16,18 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
 1. Quit Google Chrome if it is opened
 2. Open Google Chrome with `--remote-debugging-port=9222` passed into the command line arguments.
     - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in the config file if another port is used
-3. Run `python scrape.py -t <thread-id> [-p <page-numbers>] [-o <output-folder>] [--remove-me]`
-    - `-t <thread-id>` is required
-    - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\
-    Examples: `-p 1` / `-p 1-5,8,11-13`
-    - `-o <output-folder>` is optional, will save the output to `output` if not provided
-    - `--remove-me` is optional, will remove the logged in user data (if any) from the output
+3. Run `scrape.py`
+    - To scrape a thread, run `python scrape.py -t <thread-id> [-p <page-numbers>] [-o <output-folder>] [--remove-me]`
+        - `-t <thread-id>` is required
+        - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\
+        Examples: `-p 1` / `-p 1-5,8,11-13`
+        - `-o <output-folder>` is optional, will save the output to `output` if not provided
+        - `--remove-me` is optional, will remove the logged in user data (if any) from the output
+    - To scrape a page's left panel, run `python scrape.py -l <url-to-page-with-left-panel> [--max-number-of-topics <max-number-of-topics>] [-o <output-folder>] [--remove-me]`
+        - `-l <url-to-page-with-left-panel>` is required
+        - `--max-number-of-topics <max-number-of-topics>` is optional, defaults to 5 if not provided
+        - `-o <output-folder>` is optional, will save the output to `output` if not provided
+        - `--remove-me` is optional, will remove the logged in user data (if any) from the output
 
 ## Viewing the output
 
