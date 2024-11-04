@@ -16,7 +16,7 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
 1. Quit Google Chrome if it is opened
 2. Open Google Chrome with `--remote-debugging-port=9222` passed into the command line arguments.
     - The port `9222` may be changed to other available ports. Please also edit `debugger_address` in the config file if another port is used
-3. Run `scrape.py`
+3. Run the program
     - To scrape a thread, run `python scrape.py -t <thread-id> [-p <page-numbers>] [-o <output-folder>] [--remove-me]`
         - `-t <thread-id>` is required
         - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\
