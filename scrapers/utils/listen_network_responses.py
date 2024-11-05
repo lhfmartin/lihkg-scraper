@@ -21,6 +21,7 @@ def listen_network_responses(
     req_id = None
     res_url = None
     is_res_completely_loaded = False
+    matching_res_count = 0
 
     t_0 = time.perf_counter()
     while not is_res_completely_loaded:
@@ -41,6 +42,7 @@ def listen_network_responses(
             ):
                 req_id = pl["params"]["requestId"]
                 res_url = pl["params"]["response"]["url"]
+                matching_res_count += 1
             elif (
                 pl["method"] == "Network.loadingFinished"
                 and pl["params"]["requestId"] == req_id
@@ -48,6 +50,8 @@ def listen_network_responses(
                 is_res_completely_loaded = True
 
         time.sleep(0.1)
+
+    assert matching_res_count == 1
 
     res = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": req_id})
 
