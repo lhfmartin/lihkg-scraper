@@ -25,7 +25,9 @@ def listen_network_responses(
     t_0 = time.perf_counter()
     while not is_res_completely_loaded:
         if time.perf_counter() - t_0 > LOADING_TIMEOUT:
-            raise TimeoutError("Timeout exceeded")
+            raise RuntimeError(
+                "Did not receive the anticipated response within the timeout period"
+            )
         performance_logs = driver.get_log("performance")
         performance_logs = [
             json.loads(pl["message"])["message"] for pl in performance_logs
