@@ -13,13 +13,15 @@ def scrape_left_panel(
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
 
+    artifact_metadata = ArtifactMetadata("topics", None)
+
     logger.info(f"Scraping the left panel of {url}")
 
     left_panel_content_identifier, topics = scraping.core.scrape_left_panel(
         url, limit, open_new_tab=True
     )
 
-    artifact_metadata = ArtifactMetadata("topics", left_panel_content_identifier)
+    artifact_metadata.content_identifier = left_panel_content_identifier
 
     topic_list_dao = TopicListDao(output_folder_path, artifact_metadata)
 
