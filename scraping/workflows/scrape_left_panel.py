@@ -1,7 +1,6 @@
-from datetime import datetime, timezone
 import logging
 
-import scrapers.core
+import scraping.core
 from dao import TopicListDao
 from postprocessing import remove_logged_in_user_data
 from logger import initialize_logger
@@ -14,19 +13,13 @@ def scrape_left_panel(
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
 
-    scrape_time_str = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-
     logger.info(f"Scraping the left panel of {url}")
 
-    left_panel_content_identifier, topics = scrapers.core.scrape_left_panel(
+    left_panel_content_identifier, topics = scraping.core.scrape_left_panel(
         url, limit, open_new_tab=True
     )
 
-    artifact_metadata = ArtifactMetadata(
-        "topics",
-        left_panel_content_identifier,
-        scrape_time_str,
-    )
+    artifact_metadata = ArtifactMetadata("topics", left_panel_content_identifier)
 
     topic_list_dao = TopicListDao(output_folder_path, artifact_metadata)
 

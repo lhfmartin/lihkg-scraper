@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 from drivers import driver
-from scrapers.utils import listen_network_responses
+from scraping.utils import listen_network_responses
 
 
 logger = logging.getLogger("lihkg-scraper")

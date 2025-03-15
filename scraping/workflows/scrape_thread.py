@@ -1,8 +1,7 @@
 import copy
-from datetime import datetime, timezone
 import logging
 
-import scrapers.core
+import scraping.core
 from dao import ImageDao, PageDao, ThreadDao
 from postprocessing import (
     remove_logged_in_user_data,
@@ -28,8 +27,7 @@ def scrape_thread(
             ):
                 page_numbers_actual.add(page)
 
-    scrape_time_str = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    artifact_metadata = ArtifactMetadata("thread", thread_id, scrape_time_str)
+    artifact_metadata = ArtifactMetadata("thread", thread_id)
 
     thread_dao = ThreadDao(output_folder_path, artifact_metadata)
     image_dao = ImageDao(output_folder_path, artifact_metadata)
@@ -40,9 +38,9 @@ def scrape_thread(
     )
 
     if len(page_numbers_actual) == 0:
-        pages = scrapers.core.scrape_thread(thread_id, open_new_tab=True)
+        pages = scraping.core.scrape_thread(thread_id, open_new_tab=True)
     else:
-        pages = scrapers.core.scrape_pages(
+        pages = scraping.core.scrape_pages(
             thread_id,
             page_numbers=page_numbers_actual,
             open_new_tab=True,

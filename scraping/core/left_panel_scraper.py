@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
 from drivers import driver
-from scrapers.utils import (
+from scraping.utils import (
     listen_network_responses,
     determine_left_panel_content_identifier,
 )
