@@ -13,7 +13,7 @@ def scrape_left_panel(
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
 
-    artifact_metadata = ArtifactMetadata("topics", None)
+    artifact_metadata = ArtifactMetadata("topics", url)
 
     logger.info(f"Scraping the left panel of {url}")
 

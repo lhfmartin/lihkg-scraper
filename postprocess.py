@@ -50,11 +50,7 @@ if __name__ == "__main__":
     if not (path.exists() and path.is_dir()):
         raise FileNotFoundError(f"'{folder}' does not exist or is not a directory")
 
-    artifact_metadata = ArtifactMetadata(
-        path.name.split("_")[0],
-        path.name.split("_", 1)[1].rsplit("_", 1)[0],
-        path.name.split("_")[-1],
-    )
+    artifact_metadata = ArtifactMetadata.from_folder_name(path.name)
 
     thread_dao = ThreadDao(path.parent, artifact_metadata)
     image_dao = ImageDao(path.parent, artifact_metadata)
