@@ -1,6 +1,6 @@
 import logging
 
-import scraping.core
+import scraping
 from dao import TopicListDao
 from postprocessing import remove_logged_in_user_data
 from logger import initialize_logger
@@ -17,7 +17,7 @@ def scrape_left_panel(
 
     logger.info(f"Scraping the left panel of {url}")
 
-    left_panel_content_identifier, topics = scraping.core.scrape_left_panel(
+    left_panel_content_identifier, topics = scraping.scrape_left_panel(
         url, limit, open_new_tab=True
     )
 

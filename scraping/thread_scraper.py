@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from scraping.core.pages_scraper import scrape_pages
+from scraping.pages_scraper import scrape_pages
 
 
 def scrape_thread(

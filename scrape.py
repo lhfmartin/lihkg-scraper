@@ -35,13 +35,13 @@ if __name__ == "__main__":
     output_folder_path = args.output_folder
     remove_me = args.remove_me
 
-    import scraping.workflows
+    import workflows
 
     if thread_id is not None:
-        scraping.workflows.scrape_thread(
+        workflows.scrape_thread(
             thread_id, page_numbers, output_folder_path, remove_me
         )
     elif left_panel_url is not None:
-        scraping.workflows.scrape_left_panel(
+        workflows.scrape_left_panel(
             left_panel_url, max_number_of_topics, output_folder_path, remove_me
         )

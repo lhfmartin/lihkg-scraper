@@ -1,7 +1,7 @@
 import copy
 import logging
 
-import scraping.core
+import scraping
 from dao import ImageDao, PageDao, ThreadDao
 from postprocessing import (
     remove_logged_in_user_data,
@@ -38,9 +38,9 @@ def scrape_thread(
     )
 
     if len(page_numbers_actual) == 0:
-        pages = scraping.core.scrape_thread(thread_id, open_new_tab=True)
+        pages = scraping.scrape_thread(thread_id, open_new_tab=True)
     else:
-        pages = scraping.core.scrape_pages(
+        pages = scraping.scrape_pages(
             thread_id,
             page_numbers=page_numbers_actual,
             open_new_tab=True,
