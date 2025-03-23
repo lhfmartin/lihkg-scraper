@@ -13,7 +13,7 @@ logger = logging.getLogger("lihkg-scraper")
 
 
 def scrape_left_panel(
-    url: str, limit: int = None, open_new_tab: bool = False
+    url: str, limit: int | None = None, open_new_tab: bool = False
 ) -> tuple[str, list[dict]]:
     if open_new_tab:
         driver.switch_to.new_window("tab")
