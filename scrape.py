@@ -1,4 +1,6 @@
 if __name__ == "__main__":
+    from enums import PostProcessingActions
+
     import argparse
 
     parser = argparse.ArgumentParser(allow_abbrev=False)
@@ -24,7 +26,11 @@ if __name__ == "__main__":
         "-o", "--output-folder", required=False, default="./output"
     )
     universal_args_group.add_argument(
-        "--remove-me", required=False, action="store_true"
+        "--post-processing-actions",
+        required=False,
+        default=[],
+        choices=[str(x) for x in PostProcessingActions],
+        nargs="+",
     )
 
     args = parser.parse_args()
@@ -33,13 +39,18 @@ if __name__ == "__main__":
     left_panel_url = args.left_panel
     max_number_of_topics = args.max_number_of_topics
     output_folder_path = args.output_folder
-    remove_me = args.remove_me
+    post_processing_actions = args.post_processing_actions
 
     import workflows
 
     if thread_id is not None:
-        workflows.scrape_thread(thread_id, page_numbers, output_folder_path, remove_me)
+        workflows.scrape_thread(
+            thread_id, page_numbers, output_folder_path, post_processing_actions
+        )
     elif left_panel_url is not None:
         workflows.scrape_left_panel(
-            left_panel_url, max_number_of_topics, output_folder_path, remove_me
+            left_panel_url,
+            max_number_of_topics,
+            output_folder_path,
+            post_processing_actions,
         )

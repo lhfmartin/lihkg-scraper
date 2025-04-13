@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field
 from datetime import datetime as DateTime, timezone as TimeZone
 from typing import ClassVar, Self
+from enums import ArtifactCategory
 
 
 @dataclass
 class ArtifactMetadata:
-    category: str
+    category: ArtifactCategory
     content_identifier: str
     datetime: DateTime = field(
         default_factory=lambda: DateTime.now(TimeZone.utc), init=False

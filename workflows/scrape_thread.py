@@ -9,11 +9,15 @@ from postprocessing import (
     download_images,
 )
 from logger import initialize_logger
+from enums import ArtifactCategory, PostProcessingActions
 from models import ArtifactMetadata
 
 
 def scrape_thread(
-    thread_id: str, page_numbers: str, output_folder_path: str, remove_me: bool
+    thread_id: str,
+    page_numbers: str,
+    output_folder_path: str,
+    post_processing_actions: list[str],
 ) -> None:
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
@@ -27,7 +31,13 @@ def scrape_thread(
             ):
                 page_numbers_actual.add(page)
 
-    artifact_metadata = ArtifactMetadata("thread", thread_id)
+    post_processing_actions = [
+        PostProcessingActions(x) for x in post_processing_actions
+    ]
+    if PostProcessingActions.ALL in post_processing_actions:
+        post_processing_actions = [x for x in PostProcessingActions]
+
+    artifact_metadata = ArtifactMetadata(ArtifactCategory.THREAD, thread_id)
 
     thread_dao = ThreadDao(output_folder_path, artifact_metadata)
     image_dao = ImageDao(output_folder_path, artifact_metadata)
@@ -58,14 +68,16 @@ def scrape_thread(
     # Postprocessing
 
     # Remove the user data of the logged-in user, shall be done before consolidate_messages
-    if remove_me:
+    if PostProcessingActions.REMOVE_ME in post_processing_actions:
         remove_logged_in_user_data(thread_dao, page_dao)
 
     # Consolidate messages and write to messages.json
-    consolidate_messages(page_dao, thread_dao)
+    if PostProcessingActions.CONSOLIDATE_MESSAGES in post_processing_actions:
+        consolidate_messages(page_dao, thread_dao)
 
     # Download images and save images and image mappings to images/ and images.json respectively
-    download_images(thread_dao, image_dao)
+    if PostProcessingActions.DOWNLOAD_IMAGES in post_processing_actions:
+        download_images(thread_dao, image_dao)
 
     logger.info(
         f"Scraping completed. Data have been saved to {thread_dao.artifact_folder_path}"

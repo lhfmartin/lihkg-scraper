@@ -1,1 +1,2 @@
+from .artifact_category import ArtifactCategory
 from .post_processing_actions import PostProcessingActions
