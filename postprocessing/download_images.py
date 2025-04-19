@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
-import json
+from hashlib import sha1
 import logging
 import re
 import requests
-import uuid
 from urllib.parse import urlparse
 
 from dao import ThreadDao, ImageDao
@@ -78,12 +77,12 @@ def download_images(thread_dao: ThreadDao, image_dao: ImageDao) -> dict:
             images_downloads[IMAGE_DOWNLOAD_STATUS_FAILED][x] = str(e)
             continue
 
-        response_content_type = response.headers.get("Content-Type")
-        if response_content_type is None:
+        response_header_content_type = response.headers.get("Content-Type")
+        if response_header_content_type is None:
             logger.debug(f"The Content-Type header of {x} is missing")
-        elif "image/" in response_content_type:
-            file_format = response_content_type[6:]
-            image_new_file_name = f"{uuid.uuid4().hex}.{file_format}"
+        elif "image/" in response_header_content_type:
+            file_format = response_header_content_type[6:]
+            image_new_file_name = f"{sha1(response.content).hexdigest()}.{file_format}"
 
             image_dao.save_image(image_new_file_name, response.content)
             images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED][x] = image_new_file_name
