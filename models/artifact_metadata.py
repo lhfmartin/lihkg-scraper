@@ -16,7 +16,8 @@ class ArtifactMetadata:
     @classmethod
     def from_folder_name(cls, folder_name: str) -> Self:
         artifact_metadata = ArtifactMetadata(
-            folder_name.split("_")[0], folder_name.split("_", 1)[1].rsplit("_", 1)[0]
+            ArtifactCategory(folder_name.split("_")[0]),
+            folder_name.split("_", 1)[1].rsplit("_", 1)[0],
         )
         artifact_metadata.datetime = DateTime.strptime(
             folder_name.split("_")[-1], cls.DATE_TIME_STR_FORMAT
