@@ -1,24 +1,16 @@
 import logging
 from pathlib import Path
 
-from dao import ImageDao, PageDao, ThreadDao
-from postprocessing import (
-    remove_logged_in_user_data,
-    consolidate_messages,
-    download_images,
-)
+from dao import ImageDao, PageDao, ThreadDao, TopicListDao
+import postprocessing.apply
 from logger import initialize_logger
-from enums import PostProcessingActions
+from enums import ArtifactCategory, PostProcessingActions
 from models import ArtifactMetadata
 
 
 def postprocess(folder: str, actions: list[str]) -> None:
     initialize_logger()
     logger = logging.getLogger("lihkg-scraper")
-
-    actions = [PostProcessingActions(x) for x in actions]
-    if PostProcessingActions.ALL in actions:
-        actions = [x for x in PostProcessingActions]
 
     path = Path(folder)
 
@@ -27,35 +19,22 @@ def postprocess(folder: str, actions: list[str]) -> None:
 
     artifact_metadata = ArtifactMetadata.from_folder_name(path.name)
 
-    thread_dao = ThreadDao(path.parent, artifact_metadata)
-    image_dao = ImageDao(path.parent, artifact_metadata)
-    page_dao = PageDao(path.parent, artifact_metadata)
+    thread_dao = image_dao = page_dao = topic_list_dao = None
 
-    if PostProcessingActions.REMOVE_ME in actions:
-        logger.info(
-            f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.artifact_folder_path}"
-        )
-        remove_logged_in_user_data(thread_dao, page_dao)
-        logger.info(
-            f"Completed {PostProcessingActions.REMOVE_ME} on {thread_dao.artifact_folder_path}"
-        )
+    if artifact_metadata.category == ArtifactCategory.THREAD:
+        thread_dao = ThreadDao(path.parent, artifact_metadata)
+        image_dao = ImageDao(path.parent, artifact_metadata)
+        page_dao = PageDao(path.parent, artifact_metadata)
+    elif artifact_metadata.category == ArtifactCategory.TOPICS:
+        topic_list_dao = TopicListDao(path.parent, artifact_metadata)
 
-    if PostProcessingActions.CONSOLIDATE_MESSAGES in actions:
-        logger.info(
-            f"Performing {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.artifact_folder_path}"
-        )
-        consolidate_messages(page_dao, thread_dao)
-        logger.info(
-            f"Completed {PostProcessingActions.CONSOLIDATE_MESSAGES} on {thread_dao.artifact_folder_path}"
-        )
-
-    if PostProcessingActions.DOWNLOAD_IMAGES in actions:
-        logger.info(
-            f"Performing {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.artifact_folder_path}"
-        )
-        download_images(thread_dao, image_dao)
-        logger.info(
-            f"Completed {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.artifact_folder_path}"
-        )
+    postprocessing.apply(
+        [PostProcessingActions(x) for x in actions],
+        artifact_metadata,
+        thread_dao,
+        page_dao,
+        image_dao,
+        topic_list_dao,
+    )
 
     logger.info("Done")

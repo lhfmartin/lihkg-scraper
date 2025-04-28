@@ -3,11 +3,7 @@ import logging
 
 import scraping
 from dao import ImageDao, PageDao, ThreadDao
-from postprocessing import (
-    remove_logged_in_user_data,
-    consolidate_messages,
-    download_images,
-)
+import postprocessing.apply
 from logger import initialize_logger
 from enums import ArtifactCategory, PostProcessingActions
 from models import ArtifactMetadata
@@ -30,12 +26,6 @@ def scrape_thread(
                 int(page_range.split("-")[-1]) + 1,
             ):
                 page_numbers_actual.add(page)
-
-    post_processing_actions = [
-        PostProcessingActions(x) for x in post_processing_actions
-    ]
-    if PostProcessingActions.ALL in post_processing_actions:
-        post_processing_actions = [x for x in PostProcessingActions]
 
     artifact_metadata = ArtifactMetadata(ArtifactCategory.THREAD, thread_id)
 
@@ -67,17 +57,13 @@ def scrape_thread(
 
     # Postprocessing
 
-    # Remove the user data of the logged-in user, shall be done before consolidate_messages
-    if PostProcessingActions.REMOVE_ME in post_processing_actions:
-        remove_logged_in_user_data(thread_dao, page_dao)
-
-    # Consolidate messages and write to messages.json
-    if PostProcessingActions.CONSOLIDATE_MESSAGES in post_processing_actions:
-        consolidate_messages(page_dao, thread_dao)
-
-    # Download images and save images and image mappings to images/ and images.json respectively
-    if PostProcessingActions.DOWNLOAD_IMAGES in post_processing_actions:
-        download_images(thread_dao, image_dao)
+    postprocessing.apply(
+        [PostProcessingActions(x) for x in post_processing_actions],
+        artifact_metadata,
+        thread_dao,
+        page_dao,
+        image_dao,
+    )
 
     logger.info(
         f"Scraping completed. Data have been saved to {thread_dao.artifact_folder_path}"
