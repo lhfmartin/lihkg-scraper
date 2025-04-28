@@ -7,7 +7,7 @@ def scrape_pages(
     thread_id: str,
     start_page_number: int = 1,
     end_page_number: int | None = None,
-    page_numbers: list | set | tuple = (),
+    page_numbers: list[int] | set[int] | tuple[int] = (),
     open_new_tab: bool = False,
 ) -> Iterator[tuple[int, dict]]:
     if open_new_tab:
