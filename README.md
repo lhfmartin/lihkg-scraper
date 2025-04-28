@@ -22,12 +22,12 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
         - `-p <page-numbers>` is optional, will scrape all pages in the thread if not provided\
         Examples: `-p 1` / `-p 1-5,8,11-13`
         - `-o <output-folder>` is optional, will save the output to `./output` if not provided
-        - `--post-processing-actions <post-processing-actions>` is optional. If provided, will run the specified function(s) in the post-processing stage
+        - `--post-processing-actions <post-processing-actions>` is optional. If provided, will run the specified function(s) in the post-processing stage. When scraping a thread, these post-processing actions are supported: `all`, `remove_me`, `consolidate_messages`, `download_images`
     - To scrape a page's left panel, run `python scrape.py -l <url-to-page-with-left-panel> [--max-number-of-topics <max-number-of-topics>] [-o <output-folder>] [--post-processing-actions <post-processing-actions>]`
         - `-l <url-to-page-with-left-panel>` is required
         - `--max-number-of-topics <max-number-of-topics>` is optional, defaults to 5 if not provided
         - `-o <output-folder>` is optional, will save the output to `./output` if not provided
-        - `--post-processing-actions <post-processing-actions>` is optional. If provided, will run the specified function(s) in the post-processing stage
+        - `--post-processing-actions <post-processing-actions>` is optional. If provided, will run the specified function(s) in the post-processing stage. When scraping a page's left panel, these post-processing actions are supported: `all`, `remove_me`
 
 ## Viewing the output
 
