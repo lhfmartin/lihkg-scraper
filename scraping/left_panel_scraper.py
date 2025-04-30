@@ -26,11 +26,13 @@ def scrape_left_panel(
     while limit is None or len(topics) < limit:
         res_url, res_body = listen_network_responses(
             [
-                "lihkg.com/api_v2/thread/category?",
-                "lihkg.com/api_v2/user/(\d+)/thread?",
-                "lihkg.com/api_v2/thread/bookmark?",
-                "lihkg.com/api_v2/thread/hot?",
-                "lihkg.com/api_v2/thread/latest?",
+                r"lihkg\.com/api_v2/thread/category\?",
+                r"lihkg\.com/api_v2/user/(\d+)/thread\?",
+                r"lihkg\.com/api_v2/thread/bookmark\?",
+                r"lihkg\.com/api_v2/thread/hot\?",
+                r"lihkg\.com/api_v2/thread/latest\?",
+                r"lihkg\.com/api_v2/thread/custom\?",
+                r"lihkg\.com/api_v2/thread/news\?",
             ],
         )
 
