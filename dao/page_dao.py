@@ -3,7 +3,7 @@ import os
 import pathlib
 import re
 
-from .Dao import Dao
+from .dao import Dao
 from models import ArtifactMetadata
 
 

@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-from .Dao import Dao
+from .dao import Dao
 from models import ArtifactMetadata
 from config import config
 

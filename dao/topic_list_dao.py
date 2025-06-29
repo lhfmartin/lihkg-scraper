@@ -1,7 +1,7 @@
 import json
 import os
 
-from .Dao import Dao
+from .dao import Dao
 from models import ArtifactMetadata
 
 
