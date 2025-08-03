@@ -17,6 +17,6 @@ if __name__ == "__main__":
     folder = args.folder
     actions = args.actions
 
-    from workflows.postprocess import postprocess
+    from workflows import postprocess
 
     postprocess(folder, actions)

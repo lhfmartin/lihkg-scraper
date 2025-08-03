@@ -41,8 +41,8 @@ if __name__ == "__main__":
     output_folder_path = args.output_folder
     post_processing_actions = args.post_processing_actions
 
-    from workflows.scrape_thread import scrape_thread
-    from workflows.scrape_left_panel import scrape_left_panel
+    from workflows import scrape_thread
+    from workflows import scrape_left_panel
 
     if thread_id is not None:
         scrape_thread(
