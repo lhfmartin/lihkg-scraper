@@ -128,9 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# macOS
 .DS_Store
 
+# lihkg-scraper output and user data
 output/*
 !output/.keep
 
 config/config.ini
+
+google-chrome-user-data
