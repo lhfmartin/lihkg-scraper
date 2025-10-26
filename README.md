@@ -31,4 +31,4 @@ The approach is selenium will connect to the local Chrome browser via [Chrome De
 
 ## Viewing the output
 
-To view the output in a human-readable manner, use the web app [LIHKG Snapshot Viewer](https://lhfmartin.github.io/lihkg-snapshot-viewer/) (repository: [lihkg-snapshot-viewer](https://github.com/lhfmartin/lihkg-snapshot-viewer))
+To view a scraped thread (scraped with argument `--post-processing-actions all` or `--post-processing-actions consolidate_messages`) in a human-readable manner, use the web app [LIHKG Snapshot Viewer](https://lhfmartin.github.io/lihkg-snapshot-viewer/) (repository: [lihkg-snapshot-viewer](https://github.com/lhfmartin/lihkg-snapshot-viewer))
