@@ -12,9 +12,11 @@ logger = logging.getLogger("lihkg-scraper")
 
 
 def apply(
-    post_processing_actions: list[PostProcessingActions]
-    | set[PostProcessingActions]
-    | tuple[PostProcessingActions, ...],
+    post_processing_actions: (
+        list[PostProcessingActions]
+        | set[PostProcessingActions]
+        | tuple[PostProcessingActions, ...]
+    ),
     artifact_metadata: ArtifactMetadata,
     thread_dao: ThreadDao | None = None,
     page_dao: PageDao | None = None,
