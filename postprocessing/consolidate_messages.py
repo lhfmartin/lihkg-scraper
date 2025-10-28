@@ -1,7 +1,9 @@
 from dao import PageDao, ThreadDao
 
 
-def consolidate_messages(page_dao: PageDao, thread_dao: ThreadDao) -> list[dict]:
+def consolidate_messages(
+    page_dao: PageDao, thread_dao: ThreadDao, save_messages: bool = True
+) -> list[dict]:
     page_numbers = page_dao.get_available_page_numbers()
 
     all_messages = []
@@ -17,6 +19,7 @@ def consolidate_messages(page_dao: PageDao, thread_dao: ThreadDao) -> list[dict]
         all_messages[0]["dislike_count"] = dislike_count
         all_messages[0]["vote_score"] = like_count - dislike_count
 
-    thread_dao.save_messages(all_messages)
+    if save_messages:
+        thread_dao.save_messages(all_messages)
 
     return all_messages

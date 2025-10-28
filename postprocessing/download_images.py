@@ -5,7 +5,8 @@ import re
 import requests
 from urllib.parse import urlparse
 
-from dao import ThreadDao, ImageDao
+from dao import ThreadDao, PageDao, ImageDao
+from postprocessing import consolidate_messages
 
 
 IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
@@ -38,8 +39,13 @@ def build_absolute_url_from_url(url: str) -> str:
     return "https://lihkg.com" + ("" if url.startswith("/") else "/") + url
 
 
-def download_images(thread_dao: ThreadDao, image_dao: ImageDao) -> dict:
-    messages = thread_dao.load_messages()
+def download_images(
+    thread_dao: ThreadDao, page_dao: PageDao | None, image_dao: ImageDao
+) -> dict:
+    try:
+        messages = thread_dao.load_messages()
+    except FileNotFoundError:
+        messages = consolidate_messages(page_dao, thread_dao, False)
 
     soup = BeautifulSoup(
         "\n".join(message["msg"] for message in messages), features="html.parser"

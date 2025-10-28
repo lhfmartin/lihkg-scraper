@@ -54,7 +54,7 @@ def apply(
             logger.info(
                 f"Performing {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.artifact_folder_path}"
             )
-            download_images(thread_dao, image_dao)
+            download_images(thread_dao, page_dao, image_dao)
             logger.info(
                 f"Completed {PostProcessingActions.DOWNLOAD_IMAGES} on {thread_dao.artifact_folder_path}"
             )
