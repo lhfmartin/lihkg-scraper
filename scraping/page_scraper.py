@@ -34,7 +34,9 @@ def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) ->
         driver.get(page_url)
         scrape_page.dom_reuse_count = 0
 
-    _, page_data = listen_network_responses([f"{thread_id}/page/{page_number}"])
+    _, page_data = listen_network_responses(
+        [f"lihkg\\.com/api_v2/thread/{thread_id}/page/{page_number}\\?"]
+    )
 
     if open_new_tab:
         driver.close()
