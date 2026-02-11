@@ -64,9 +64,9 @@ def download_images(
 
     session = requests.Session()
 
+    urls = list(dict.fromkeys(urls))
+
     for x in urls:
-        if x in images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED]:
-            continue
         if url_matches_skip_download_patterns(x):
             logger.debug(f"Skipping {x} as it matches the predefined patterns to skip")
             continue
