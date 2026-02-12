@@ -1,0 +1,36 @@
+name: Main
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  standardize_code:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+
+    - name: Set up git user
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+    - name: Format files
+      run: uv tool run black .
+      
+    - name: git commit
+      run: git commit -am "Format files" || true
+
+    - name: Update requirements.txt
+      run: uv export --no-hashes --no-annotate --no-dev --format requirements.txt --output-file requirements.txt
+
+    - name: git commit
+      run:  git commit -am "Update requirements.txt" || true
+      
+    - name: git push
+      run: git push
