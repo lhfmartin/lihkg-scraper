@@ -6,7 +6,6 @@ from selenium.webdriver.support.ui import Select
 from drivers import driver
 from scraping.utils import listen_network_responses
 
-
 logger = logging.getLogger("lihkg-scraper")
 
 

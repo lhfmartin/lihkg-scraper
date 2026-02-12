@@ -8,7 +8,6 @@ from scraping.utils import (
     determine_left_panel_content_identifier,
 )
 
-
 logger = logging.getLogger("lihkg-scraper")
 
 

@@ -8,7 +8,6 @@ from urllib.parse import urlparse
 from dao import ThreadDao, PageDao, ImageDao
 from postprocessing import consolidate_messages
 
-
 IMAGE_DOWNLOAD_STATUS_DOWNLOADED = "downloaded"
 IMAGE_DOWNLOAD_STATUS_FAILED = "failed"
 URLS_TO_SKIP_DL_REGEX_LIST = [

@@ -5,7 +5,6 @@ import json
 
 from drivers import driver
 
-
 LOADING_TIMEOUT = 60
 
 logger = logging.getLogger("lihkg-scraper")
