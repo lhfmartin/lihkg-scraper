@@ -7,5 +7,5 @@ requires-python = ">=3.11"
 dependencies = [
     "beautifulsoup4==4.14.3",
     "requests==2.32.5",
-    "selenium==4.11.2",
+    "selenium==4.39.0",
 ]
