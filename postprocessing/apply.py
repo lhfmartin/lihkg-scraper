@@ -30,13 +30,13 @@ def apply(
         assert None not in (thread_dao, page_dao, image_dao)
 
         # Remove the user data of the logged-in user, shall be done before consolidate_messages
-        if PostProcessingActions.REMOVE_ME in post_processing_actions:
+        if PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA in post_processing_actions:
             logger.info(
-                f"Performing {PostProcessingActions.REMOVE_ME} on {thread_dao.artifact_folder_path}"
+                f"Performing {PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA} on {thread_dao.artifact_folder_path}"
             )
             remove_logged_in_user_data(thread_dao, page_dao)
             logger.info(
-                f"Completed {PostProcessingActions.REMOVE_ME} on {thread_dao.artifact_folder_path}"
+                f"Completed {PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA} on {thread_dao.artifact_folder_path}"
             )
 
         # Consolidate messages and write to messages.json
@@ -63,11 +63,11 @@ def apply(
         assert None not in (topic_list_dao,)
 
         # Remove the user data of the logged-in user
-        if PostProcessingActions.REMOVE_ME in post_processing_actions:
+        if PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA in post_processing_actions:
             logger.info(
-                f"Performing {PostProcessingActions.REMOVE_ME} on {topic_list_dao.artifact_folder_path}"
+                f"Performing {PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA} on {topic_list_dao.artifact_folder_path}"
             )
             remove_logged_in_user_data(topic_list_dao)
             logger.info(
-                f"Completed {PostProcessingActions.REMOVE_ME} on {topic_list_dao.artifact_folder_path}"
+                f"Completed {PostProcessingActions.REMOVE_LOGGED_IN_USER_DATA} on {topic_list_dao.artifact_folder_path}"
             )
