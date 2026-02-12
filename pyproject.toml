@@ -1,0 +1,11 @@
+[project]
+name = "lihkg-scraper"
+version = "2026.2"
+description = "Download LIHKG posts with images"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4==4.12.2",
+    "requests==2.31.0",
+    "selenium==4.11.2",
+]
