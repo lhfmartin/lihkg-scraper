@@ -67,7 +67,7 @@ def download_images(
 
     for x in urls:
         if url_matches_skip_download_patterns(x):
-            logger.debug(f"Skipping {x} as it matches the predefined patterns to skip")
+            logger.info(f"Skipping {x} as it matches the predefined patterns to skip")
             continue
 
         try:
@@ -78,22 +78,22 @@ def download_images(
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            logger.debug(f"Failed to download {x}")
+            logger.error(f"Failed to download {x} ({str(e)})")
             images_downloads[IMAGE_DOWNLOAD_STATUS_FAILED][x] = str(e)
             continue
 
         response_header_content_type = response.headers.get("Content-Type")
         if response_header_content_type is None:
-            logger.debug(f"The Content-Type header of {x} is missing")
+            logger.warning(f"The Content-Type header of {x} is missing")
         elif "image/" in response_header_content_type:
             file_format = response_header_content_type[6:]
             image_new_file_name = f"{sha1(response.content).hexdigest()}.{file_format}"
 
             image_dao.save_image(image_new_file_name, response.content)
             images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED][x] = image_new_file_name
-            logger.debug(f"Downloaded {x} successfully")
+            logger.info(f"Downloaded {x} successfully")
         else:
-            logger.debug(f"The Content-Type header says {x} is not an image")
+            logger.info(f"The Content-Type header says {x} is not an image")
 
     thread_dao.save_image_mappings(images_downloads)
 

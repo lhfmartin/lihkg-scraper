@@ -15,7 +15,7 @@ def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) ->
 
     thread_url = f"https://lihkg.com/thread/{thread_id}"
     page_url = f"{thread_url}/page/{page_number}"
-    logger.debug(f"Scraping {page_url}")
+    logger.info(f"Scraping {page_url}")
 
     if driver.current_url.startswith(
         thread_url
