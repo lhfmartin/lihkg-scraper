@@ -11,3 +11,5 @@ updates:
       interval: "monthly"
     cooldown:
       default-days: 30
+    exclude-paths:
+      - "requirements.txt"
