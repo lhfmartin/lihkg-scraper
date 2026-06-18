@@ -1,5 +1,6 @@
 import logging
 
+from analytics import initialize_posthog, posthog
 import scraping
 from dao import TopicListDao
 import postprocessing.apply
@@ -14,31 +15,40 @@ def scrape_left_panel(
     output_folder_path: str,
     post_processing_actions: list[str],
 ) -> None:
-    initialize_logger()
-    logger = logging.getLogger("lihkg-scraper")
+    with initialize_posthog():
+        initialize_logger()
+        logger = logging.getLogger("lihkg-scraper")
 
-    artifact_metadata = ArtifactMetadata(ArtifactCategory.TOPICS, url)
+        posthog.capture("scrape_left_panel_workflow_started", properties={
+            "web_page_url": url,
+            "limit": limit,
+            "post_processing_actions": post_processing_actions
+        })
 
-    logger.info(f"Scraping the left panel of {url}")
+        artifact_metadata = ArtifactMetadata(ArtifactCategory.TOPICS, url)
 
-    left_panel_content_identifier, topics = scraping.scrape_left_panel(
-        url, limit, open_new_tab=True
-    )
+        logger.info(f"Scraping the left panel of {url}")
 
-    artifact_metadata.content_identifier = left_panel_content_identifier
+        left_panel_content_identifier, topics = scraping.scrape_left_panel(
+            url, limit, open_new_tab=True
+        )
 
-    topic_list_dao = TopicListDao(output_folder_path, artifact_metadata)
+        artifact_metadata.content_identifier = left_panel_content_identifier
 
-    topic_list_dao.save_topic_list(topics)
+        topic_list_dao = TopicListDao(output_folder_path, artifact_metadata)
 
-    # Postprocessing
+        topic_list_dao.save_topic_list(topics)
 
-    postprocessing.apply(
-        [PostProcessingActions(x) for x in post_processing_actions],
-        artifact_metadata,
-        topic_list_dao=topic_list_dao,
-    )
+        # Postprocessing
 
-    logger.info(
-        f"Scraping completed. Data have been saved to {topic_list_dao.artifact_folder_path}"
-    )
+        postprocessing.apply(
+            [PostProcessingActions(x) for x in post_processing_actions],
+            artifact_metadata,
+            topic_list_dao=topic_list_dao,
+        )
+
+        posthog.capture("scrape_left_panel_workflow_completed")
+
+        logger.info(
+            f"Scraping completed. Data have been saved to {topic_list_dao.artifact_folder_path}"
+        )

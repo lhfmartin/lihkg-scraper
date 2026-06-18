@@ -2,6 +2,7 @@ import logging
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
+from analytics import initialize_posthog, posthog
 from drivers import driver
 from scraping.utils import (
     listen_network_responses,
@@ -62,6 +63,12 @@ def scrape_left_panel(
     left_panel_content_identifier = determine_left_panel_content_identifier(
         res_url, res_body_relevant
     )
+
+    posthog.capture("left_panel_scraped", properties={
+        "web_page_url": url,
+        "limit": limit,
+        "left_panel_content_identifier": left_panel_content_identifier
+    })
 
     if open_new_tab:
         driver.close()

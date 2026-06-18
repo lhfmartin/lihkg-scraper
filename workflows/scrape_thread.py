@@ -1,6 +1,7 @@
 import copy
 import logging
 
+from analytics import initialize_posthog, posthog
 import scraping
 from dao import ImageDao, PageDao, ThreadDao
 import postprocessing.apply
@@ -15,56 +16,65 @@ def scrape_thread(
     output_folder_path: str,
     post_processing_actions: list[str],
 ) -> None:
-    initialize_logger()
-    logger = logging.getLogger("lihkg-scraper")
+    with initialize_posthog():
+        initialize_logger()
+        logger = logging.getLogger("lihkg-scraper")
 
-    page_numbers_actual = set()
-    if page_numbers is not None:
-        for page_range in page_numbers.split(","):
-            for page in range(
-                int(page_range.split("-")[0]),
-                int(page_range.split("-")[-1]) + 1,
-            ):
-                page_numbers_actual.add(page)
+        page_numbers_actual = set()
+        if page_numbers is not None:
+            for page_range in page_numbers.split(","):
+                for page in range(
+                    int(page_range.split("-")[0]),
+                    int(page_range.split("-")[-1]) + 1,
+                ):
+                    page_numbers_actual.add(page)
 
-    artifact_metadata = ArtifactMetadata(ArtifactCategory.THREAD, thread_id)
+        posthog.capture("scrape_thread_workflow_started", properties={
+            "thread_id": thread_id,
+            "page_numbers": page_numbers_actual,
+            "post_processing_actions": post_processing_actions
+        })
 
-    thread_dao = ThreadDao(output_folder_path, artifact_metadata)
-    image_dao = ImageDao(output_folder_path, artifact_metadata)
-    page_dao = PageDao(output_folder_path, artifact_metadata)
+        artifact_metadata = ArtifactMetadata(ArtifactCategory.THREAD, thread_id)
 
-    logger.info(
-        f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.artifact_folder_path}"
-    )
+        thread_dao = ThreadDao(output_folder_path, artifact_metadata)
+        image_dao = ImageDao(output_folder_path, artifact_metadata)
+        page_dao = PageDao(output_folder_path, artifact_metadata)
 
-    if len(page_numbers_actual) == 0:
-        pages = scraping.scrape_thread(thread_id, open_new_tab=True)
-    else:
-        pages = scraping.scrape_pages(
-            thread_id,
-            page_numbers=page_numbers_actual,
-            open_new_tab=True,
+        logger.info(
+            f"Scraping {'page ' + ','.join(map(str, page_numbers_actual)) if len(page_numbers_actual) > 0 else 'all pages'} of thread {thread_id}. Output files will be saved in {thread_dao.artifact_folder_path}"
         )
 
-    for page_number, page_data in pages:
-        page_dao.save_page(page_number, page_data)
+        if len(page_numbers_actual) == 0:
+            pages = scraping.scrape_thread(thread_id, open_new_tab=True)
+        else:
+            pages = scraping.scrape_pages(
+                thread_id,
+                page_numbers=page_numbers_actual,
+                open_new_tab=True,
+            )
 
-    # Process thread data and write to topic.json
-    thread_data = copy.deepcopy(page_data["response"])
-    del thread_data["page"]
-    del thread_data["item_data"]
-    thread_dao.save_topic(thread_data)
+        for page_number, page_data in pages:
+            page_dao.save_page(page_number, page_data)
 
-    # Postprocessing
+        # Process thread data and write to topic.json
+        thread_data = copy.deepcopy(page_data["response"])
+        del thread_data["page"]
+        del thread_data["item_data"]
+        thread_dao.save_topic(thread_data)
 
-    postprocessing.apply(
-        [PostProcessingActions(x) for x in post_processing_actions],
-        artifact_metadata,
-        thread_dao,
-        page_dao,
-        image_dao,
-    )
+        # Postprocessing
 
-    logger.info(
-        f"Scraping completed. Data have been saved to {thread_dao.artifact_folder_path}"
-    )
+        postprocessing.apply(
+            [PostProcessingActions(x) for x in post_processing_actions],
+            artifact_metadata,
+            thread_dao,
+            page_dao,
+            image_dao,
+        )
+
+        posthog.capture("scrape_thread_workflow_completed")
+
+        logger.info(
+            f"Scraping completed. Data have been saved to {thread_dao.artifact_folder_path}"
+        )
