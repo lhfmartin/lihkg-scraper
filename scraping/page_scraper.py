@@ -3,6 +3,7 @@ from random import randint
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
+from analytics import posthog
 from drivers import driver
 from scraping.utils import listen_network_responses
 
@@ -36,6 +37,11 @@ def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) ->
     _, page_data = listen_network_responses(
         [f"lihkg\\.com/api_v2/thread/{thread_id}/page/{page_number}\\?"]
     )
+
+    posthog.capture("page_scraped", properties={
+        "thread_id": thread_id,
+        "page_number": page_number
+    })
 
     if open_new_tab:
         driver.close()

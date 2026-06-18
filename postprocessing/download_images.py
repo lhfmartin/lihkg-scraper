@@ -5,6 +5,7 @@ import re
 import requests
 from urllib.parse import urlparse
 
+from analytics import posthog
 from dao import ThreadDao, PageDao, ImageDao
 from postprocessing import consolidate_messages
 
@@ -78,12 +79,20 @@ def download_images(
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
+            posthog.capture("image_download_failed", properties={
+                "image_url": x,
+                "reason": str(e)
+            })
             logger.error(f"Failed to download {x} ({str(e)})")
             images_downloads[IMAGE_DOWNLOAD_STATUS_FAILED][x] = str(e)
             continue
 
         response_header_content_type = response.headers.get("Content-Type")
         if response_header_content_type is None:
+            posthog.capture("image_not_saved", properties={
+                "image_url": x,
+                "reason": "The Content-Type header is missing"
+            })
             logger.warning(f"The Content-Type header of {x} is missing")
         elif "image/" in response_header_content_type:
             file_format = response_header_content_type[6:]
@@ -91,8 +100,15 @@ def download_images(
 
             image_dao.save_image(image_new_file_name, response.content)
             images_downloads[IMAGE_DOWNLOAD_STATUS_DOWNLOADED][x] = image_new_file_name
+            posthog.capture("image_downloaded", properties={
+                "image_url": x,
+            })
             logger.info(f"Downloaded {x} successfully")
         else:
+            posthog.capture("image_not_saved", properties={
+                "image_url": x,
+                "reason": "The Content-Type header says it is not an image"
+            })
             logger.info(f"The Content-Type header says {x} is not an image")
 
     thread_dao.save_image_mappings(images_downloads)
