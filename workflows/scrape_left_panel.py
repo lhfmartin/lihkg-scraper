@@ -19,11 +19,14 @@ def scrape_left_panel(
         initialize_logger()
         logger = logging.getLogger("lihkg-scraper")
 
-        posthog.capture("scrape_left_panel_workflow_started", properties={
-            "web_page_url": url,
-            "limit": limit,
-            "post_processing_actions": post_processing_actions
-        })
+        posthog.capture(
+            "scrape_left_panel_workflow_started",
+            properties={
+                "web_page_url": url,
+                "limit": limit,
+                "post_processing_actions": post_processing_actions,
+            },
+        )
 
         artifact_metadata = ArtifactMetadata(ArtifactCategory.TOPICS, url)
 

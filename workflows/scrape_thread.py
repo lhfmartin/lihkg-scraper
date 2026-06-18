@@ -29,11 +29,14 @@ def scrape_thread(
                 ):
                     page_numbers_actual.add(page)
 
-        posthog.capture("scrape_thread_workflow_started", properties={
-            "thread_id": thread_id,
-            "page_numbers": page_numbers_actual,
-            "post_processing_actions": post_processing_actions
-        })
+        posthog.capture(
+            "scrape_thread_workflow_started",
+            properties={
+                "thread_id": thread_id,
+                "page_numbers": page_numbers_actual,
+                "post_processing_actions": post_processing_actions,
+            },
+        )
 
         artifact_metadata = ArtifactMetadata(ArtifactCategory.THREAD, thread_id)
 

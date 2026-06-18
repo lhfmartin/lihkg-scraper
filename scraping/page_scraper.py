@@ -38,10 +38,9 @@ def scrape_page(thread_id: str, page_number: int, open_new_tab: bool = False) ->
         [f"lihkg\\.com/api_v2/thread/{thread_id}/page/{page_number}\\?"]
     )
 
-    posthog.capture("page_scraped", properties={
-        "thread_id": thread_id,
-        "page_number": page_number
-    })
+    posthog.capture(
+        "page_scraped", properties={"thread_id": thread_id, "page_number": page_number}
+    )
 
     if open_new_tab:
         driver.close()

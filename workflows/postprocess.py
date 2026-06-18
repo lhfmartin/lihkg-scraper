@@ -14,10 +14,10 @@ def postprocess(folder: str, actions: list[str]) -> None:
         initialize_logger()
         logger = logging.getLogger("lihkg-scraper")
 
-        posthog.capture("postprocess_workflow_started", properties={
-            "folder": folder,
-            "post_processing_actions": actions
-        })
+        posthog.capture(
+            "postprocess_workflow_started",
+            properties={"folder": folder, "post_processing_actions": actions},
+        )
 
         path = Path(folder)
 

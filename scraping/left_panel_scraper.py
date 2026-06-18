@@ -64,11 +64,14 @@ def scrape_left_panel(
         res_url, res_body_relevant
     )
 
-    posthog.capture("left_panel_scraped", properties={
-        "web_page_url": url,
-        "limit": limit,
-        "left_panel_content_identifier": left_panel_content_identifier
-    })
+    posthog.capture(
+        "left_panel_scraped",
+        properties={
+            "web_page_url": url,
+            "limit": limit,
+            "left_panel_content_identifier": left_panel_content_identifier,
+        },
+    )
 
     if open_new_tab:
         driver.close()
