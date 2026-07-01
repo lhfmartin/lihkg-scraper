@@ -5,7 +5,7 @@ requires-python = ">=3.11"
 dependencies = [
     "beautifulsoup4==4.14.3",
     "posthog>=7.14.2",
-    "requests==2.33.1",
+    "requests==2.34.2",
     "selenium==4.44.0",
 ]
 
