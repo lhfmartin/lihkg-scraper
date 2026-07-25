@@ -17,7 +17,7 @@ URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https:\/\/lih\.kg\/",
 ]
 REQUEST_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
 }
 REQUEST_TIMEOUT = 120
 
