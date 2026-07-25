@@ -16,7 +16,8 @@ URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https://youtu\.be/",
     "^https://lihkg\.com/thread/",
     "^https://lih\.kg/",
-    "^https://www\.instagram\.com/" "^https://www\.threads\.com/",
+    "^https://www\.instagram\.com/",
+    "^https://www\.threads\.com/",
     "^https://x\.com/",
 ]
 REQUEST_HEADERS = {
