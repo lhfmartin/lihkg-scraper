@@ -16,9 +16,8 @@ URLS_TO_SKIP_DL_REGEX_LIST = [
     "^https://youtu\.be/",
     "^https://lihkg\.com/thread/",
     "^https://lih\.kg/",
-    "^https://www\.instagram\.com/"
-    "^https://www\.threads\.com/",
-    "^https://x\.com/"
+    "^https://www\.instagram\.com/" "^https://www\.threads\.com/",
+    "^https://x\.com/",
 ]
 REQUEST_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
