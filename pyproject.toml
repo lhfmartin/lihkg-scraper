@@ -3,10 +3,10 @@ name = "lihkg-scraper"
 version = "2026"
 requires-python = ">=3.11"
 dependencies = [
-    "beautifulsoup4==4.14.3",
-    "posthog>=7.16.2",
+    "beautifulsoup4==4.15.0",
+    "posthog>=7.21.3",
     "requests==2.34.2",
-    "selenium==4.44.0",
+    "selenium==4.45.0",
 ]
 
 [tool.uv]
