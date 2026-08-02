@@ -13,3 +13,7 @@ updates:
       default-days: 30
     exclude-paths:
       - "requirements.txt"
+    groups:
+      uv:
+        patterns:
+          - '*'
