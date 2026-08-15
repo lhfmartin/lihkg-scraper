@@ -14,6 +14,6 @@ updates:
     exclude-paths:
       - "requirements.txt"
     groups:
-      uv:
+      python:
         patterns:
           - '*'
