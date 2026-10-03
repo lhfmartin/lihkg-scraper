@@ -186,9 +186,9 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "beautifulsoup4", specifier = "==4.15.0" },
-    { name = "posthog", specifier = ">=7.21.3" },
+    { name = "posthog", specifier = ">=7.35.5" },
     { name = "requests", specifier = "==2.34.2" },
-    { name = "selenium", specifier = "==4.45.0" },
+    { name = "selenium", specifier = "==4.46.0" },
 ]
 
 [[package]]
@@ -205,7 +205,7 @@ wheels = [
 
 [[package]]
 name = "posthog"
-version = "7.21.3"
+version = "7.35.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "backoff" },
@@ -213,9 +213,9 @@ dependencies = [
     { name = "requests" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/d4/ac12ee84633287c719cbbe5e8c9bee23777f87ed25190ad18bf003787b18/posthog-7.21.3.tar.gz", hash = "sha256:2192497210bb1291587c51bdd6edc475043aebe03072d718431e710360fcd329", size = 308297, upload-time = "2026-07-02T15:05:08.37Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8b/ba/6193a987e0bd319917495c47469018b4274ea9e0c227472f02d25c7f210c/posthog-7.35.5.tar.gz", hash = "sha256:e58025bc282bb863000982964e7adaa2fd1409045d4dc70631856e3a18d205c0", size = 397160, upload-time = "2026-08-03T07:36:30.533Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c6/53/0cbf0aa0b90be2076e5f8297b57c222adc6fe06ae46914cba419d35603da/posthog-7.21.3-py3-none-any.whl", hash = "sha256:eb6ad7e1704c0797e9cbfe0518bfb40bc3a56e3f140fd565d2a1d854c9615710", size = 370434, upload-time = "2026-07-02T15:05:06.79Z" },
+    { url = "https://files.pythonhosted.org/packages/1a/9b/48e2c2fd225c621000da89156199c0cb4ac2b9afd05abc8b264600263ebf/posthog-7.35.5-py3-none-any.whl", hash = "sha256:86bfdc01885746559585bf01ac3a43e1326e6636aee918d1e983c81bba2de7dd", size = 470308, upload-time = "2026-08-03T07:36:28.526Z" },
 ]
 
 [[package]]
@@ -253,7 +253,7 @@ wheels = [
 
 [[package]]
 name = "selenium"
-version = "4.45.0"
+version = "4.46.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -263,9 +263,9 @@ dependencies = [
     { name = "urllib3", extra = ["socks"] },
     { name = "websocket-client" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/86/48/486aa67320f27452e9f551b8608f1a59ce7091c8fe7ebc9f4eba274775d4/selenium-4.45.0.tar.gz", hash = "sha256:563f0c4102f112df1cda30d46ce6d177b2e4a7a3d4b0756902d5dc84d3a8a365", size = 1005503, upload-time = "2026-06-16T04:43:57.915Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a0/53/053df98ef0c38535a74ea732217eb2dbfddc7ff5442a47a4b315ba577f85/selenium-4.46.0.tar.gz", hash = "sha256:54f7e1a4df5f7508ac8c38ce2ea584db1b27083dd79962b22524219219df5cbe", size = 1006000, upload-time = "2026-07-11T00:38:41.11Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/8a/6ff6beb9c7c6cc642f628df9328a8b6637f86602eff8d28e70b5d4e8bca7/selenium-4.45.0-py3-none-any.whl", hash = "sha256:1fd9d0dc08192b2f8100e264ed720f83b05d2dd3a7feff673df04e0c7580df4b", size = 9536616, upload-time = "2026-06-16T04:43:55.968Z" },
+    { url = "https://files.pythonhosted.org/packages/30/f4/365c723a37c7e9ba6a6a19bf0c9e407137703f56a72c6201d0e4cb1432cb/selenium-4.46.0-py3-none-any.whl", hash = "sha256:f03e864770a21ab32009961c9d015cb2c6275eba45c926c272e02d90af423aad", size = 9428587, upload-time = "2026-07-11T00:38:38.84Z" },
 ]
 
 [[package]]
